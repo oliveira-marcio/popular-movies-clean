@@ -10,11 +10,15 @@ buildscript {
         targetAndroidSDkVersion = 29
         minimumAndroidSDkVersion = 21
         androidBuildToolsVersion = '29.0.2'
+        androidJUnitVersion = '1.0.0'
+        androidTestCoreVersion = '1.0.0'
         espressoVersion = '3.2.0'
-        androidJUnitVersion = '1.1.1'
         jetpackAppCompatVersion = '1.1.0'
-        jUnitVersion = '4.12'
         mockkVersion = '1.8.13'
+        okHttpVersion = '3.11.0'
+        robolectricVersion = '4.0'
+        supportTestRunnerVersion = '1.1.0'
+        supportTestRulesVersion = '1.1.0'
     }
 
     repositories {
