@@ -1,10 +1,10 @@
 package com.marcio.popularmoviesclean.movies.models
 
 data class Movie(
-    private val title: String,
-    private val poster: String,
-    private val synopsis: String,
-    private val averageRating: Double,
-    private val ratingsCount: Int,
-    private val releaseDate: String
+    val title: String,
+    val poster: String,
+    val synopsis: String,
+    val averageRating: Double,
+    val ratingsCount: Int,
+    val releaseDate: String
 )
