@@ -1,7 +1,7 @@
 package com.marcio.popularmoviesclean.state
 
 open class StateMachine<T, E>(
-    private val dispatcher: Dispatcher<T>,
+    private val dispatcher: Dispatcher,
     private val errorFactory: ErrorFactory<E>,
     protected var currentState: State<T, E> = State(State.Name.IDLE),
     private val listeners: MutableList<StateListener<T, E>> = mutableListOf()
@@ -29,12 +29,11 @@ open class StateMachine<T, E>(
         )
 
         dispatcher.dispatch(
-            function,
-            { value ->
+            {
                 changeAndEmitState(
                     State(
                         State.Name.LOADED,
-                        value
+                        function.invoke()
                     )
                 )
             },

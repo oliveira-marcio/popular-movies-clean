@@ -8,7 +8,7 @@ import com.marcio.popularmoviesclean.state.ErrorFactory
 
 class MoviesUseCases(
     private val moviesGateway: MoviesGateway,
-    dispatcher: Dispatcher<Movies>,
+    dispatcher: Dispatcher,
     errorFactory: ErrorFactory<MoviesGatewayError>
 ) : MoviesStateMachine(dispatcher, errorFactory) {
     override fun setup() {

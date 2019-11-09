@@ -7,7 +7,7 @@ import com.marcio.popularmoviesclean.state.ErrorFactory
 import com.marcio.popularmoviesclean.state.StateMachine
 
 abstract class MoviesStateMachine(
-    dispatcher: Dispatcher<Movies>,
+    dispatcher: Dispatcher,
     errorFactory: ErrorFactory<MoviesGatewayError>
 ) : StateMachine<Movies, MoviesGatewayError>(dispatcher, errorFactory) {
     abstract fun setup()
