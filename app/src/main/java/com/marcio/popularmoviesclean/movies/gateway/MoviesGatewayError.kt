@@ -1,5 +1,7 @@
 package com.marcio.popularmoviesclean.movies.gateway
 
-interface MoviesGatewayError {
-    val isNetwork: Boolean
+import java.io.IOException
+
+class MoviesGatewayError(cause: Throwable? = null) {
+    val isNetwork: Boolean = cause != null && cause is IOException
 }

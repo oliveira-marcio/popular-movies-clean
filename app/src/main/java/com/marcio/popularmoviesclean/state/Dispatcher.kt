@@ -1,6 +1,6 @@
 package com.marcio.popularmoviesclean.state
 
 interface Dispatcher {
-    fun dispatch(function: () -> Unit, error: (Throwable) -> Unit)
-    fun dispatch(function: () -> Unit)
+    fun dispatch(execute: () -> Unit, error: (Throwable) -> Unit)
+    fun dispatch(execute: () -> Unit)
 }

@@ -1,13 +1,14 @@
 package com.marcio.popularmoviesclean.movies.presentation
 
 import com.marcio.popularmoviesclean.TestData
-import com.marcio.popularmoviesclean.gateway.FakeMoviesGatewayError
+import com.marcio.popularmoviesclean.movies.gateway.MoviesGatewayError
 import com.marcio.popularmoviesclean.movies.models.Movies
 import com.marcio.popularmoviesclean.state.FakeDispatcher
 import com.marcio.popularmoviesclean.state.State
 import io.mockk.mockk
 import io.mockk.verifySequence
 import org.junit.Test
+import java.io.IOException
 
 class MoviesMainPresenterTest {
     @Test
@@ -87,7 +88,7 @@ class MoviesMainPresenterTest {
         )
 
         presenter.onStateChanged(
-            State(State.Name.ERROR, error = FakeMoviesGatewayError(true))
+            State(State.Name.ERROR, error = MoviesGatewayError(IOException()))
         )
 
         verifySequence {
@@ -107,7 +108,7 @@ class MoviesMainPresenterTest {
         )
 
         presenter.onStateChanged(
-            State(State.Name.ERROR, error = FakeMoviesGatewayError())
+            State(State.Name.ERROR, error = MoviesGatewayError())
         )
 
         verifySequence {
