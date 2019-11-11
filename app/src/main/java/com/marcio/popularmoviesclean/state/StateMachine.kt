@@ -1,11 +1,13 @@
 package com.marcio.popularmoviesclean.state
 
-open class StateMachine<T, E>(
+abstract class StateMachine<T, E>(
     private val dispatcher: Dispatcher,
     private val errorFactory: ErrorFactory<E>,
     protected var currentState: State<T, E> = State(State.Name.IDLE),
     private val listeners: MutableList<StateListener<T, E>> = mutableListOf()
 ) {
+    abstract fun start()
+
     fun addStateChangedListener(listener: StateListener<T, E>) {
         this.listeners.add(listener)
         listener.onStateChanged(currentState)

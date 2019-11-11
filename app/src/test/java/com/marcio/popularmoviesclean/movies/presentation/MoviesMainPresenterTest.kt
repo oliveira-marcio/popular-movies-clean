@@ -19,7 +19,7 @@ class MoviesMainPresenterTest {
             viewMock,
             123
         )
-        val movies = Movies(TestData.MOVIES)
+        val movies = Movies(TestData.POPULAR_MOVIES)
 
         presenter.onStateChanged(
             State(
@@ -63,7 +63,7 @@ class MoviesMainPresenterTest {
             viewMock,
             123
         )
-        val movies = Movies(TestData.MOVIES)
+        val movies = Movies(TestData.POPULAR_MOVIES)
 
         presenter.onStateChanged(
             State(

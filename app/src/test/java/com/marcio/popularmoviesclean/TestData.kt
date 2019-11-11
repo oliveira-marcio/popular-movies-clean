@@ -6,7 +6,7 @@ class TestData {
 
     companion object {
 
-        val MOVIES = listOf(
+        val POPULAR_MOVIES = listOf(
             Movie(
                 "Suicide Squad",
                 "/e1mjopzAS2KNsvpbpahQ1a6SkSn.jpg",
@@ -25,7 +25,26 @@ class TestData {
             )
         )
 
-        const val JSON_MOVIES_RESPONSE = """
+        val TOP_RATED_MOVIES = listOf(
+            Movie(
+                "The Shawshank Redemption",
+                "/9O7gLzmreU0nGkIB6K3BsJbzvNv.jpg",
+                "Framed in the 1940s for the double murder of his wife and her lover, upstanding banker Andy Dufresne begins a new life at the Shawshank prison, where he puts his accounting skills to work for an amoral warden. During his long stretch in prison, Dufresne comes to be admired by the other inmates -- including an older prisoner named Red -- for his integrity and unquenchable sense of hope.",
+                8.32,
+                5238,
+                "1994-09-10"
+            ),
+            Movie(
+                "Whiplash",
+                "/lIv1QinFqz4dlp5U4lQ6HaiskOZ.jpg",
+                "Under the direction of a ruthless instructor, a talented young drummer begins to pursue perfection at any cost, even his humanity.",
+                8.29,
+                2059,
+                "2014-10-10"
+            )
+        )
+
+        const val JSON_POPULAR_MOVIES_RESPONSE = """
             {
               "page": 1,
               "results": [

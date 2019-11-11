@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Popular Movies</string>
+    <string name="error_internet">There\'s no internet connection</string>
+    <string name="error_unknown">Bad server response. Try again later.</string>
 </resources>

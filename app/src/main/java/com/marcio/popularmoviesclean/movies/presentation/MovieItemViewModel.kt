@@ -7,5 +7,6 @@ data class MovieItemViewModel(
     private val movie: Movie,
     @DrawableRes val imagePlaceHolderResource: Int
 ) {
+    val title = movie.title
     val imageUrl = movie.poster
 }

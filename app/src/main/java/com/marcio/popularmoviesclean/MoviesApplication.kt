@@ -1,29 +1,29 @@
 package com.marcio.popularmoviesclean
 
-import com.marcio.popularmoviesclean.movies.MoviesUseCases
+import com.marcio.popularmoviesclean.movies.MoviesStateMachine
 import com.marcio.popularmoviesclean.movies.gateway.MoviesGateway
 import com.marcio.popularmoviesclean.movies.gateway.MoviesGatewayErrorFactory
-import com.marcio.popularmoviesclean.state.Dispatcher
 import com.marcio.popularmoviesclean.state.DispatcherFactory
 
 class MoviesApplication private constructor(
     lazyDispatcherFactory: Lazy<DispatcherFactory>,
     lazyMoviesGateway: Lazy<MoviesGateway>
 ) : DependencyManager {
-    private val moviesUseCases: MoviesUseCases by lazy {
-        MoviesUseCases(
+
+    override val mainDispatcher by lazy {
+        lazyDispatcherFactory.value.createMainDispatcher()
+    }
+
+    override val moviesStateMachine: MoviesStateMachine by lazy {
+        MoviesStateMachine(
             lazyMoviesGateway.value,
             lazyDispatcherFactory.value.createSerialDispatcher("Movies"),
             MoviesGatewayErrorFactory()
         )
     }
 
-    private val mainDispatcher: Dispatcher by lazy {
-        lazyDispatcherFactory.value.createMainDispatcher()
-    }
-
-    private fun setup() {
-        moviesUseCases.setup()
+    private fun start() {
+        moviesStateMachine.start()
     }
 
     class Builder {
@@ -41,10 +41,10 @@ class MoviesApplication private constructor(
             return this
         }
 
-        fun setup(): MoviesApplication {
+        fun start(): MoviesApplication {
             val application =
                 MoviesApplication(lazyDispatcherFactory!!, lazyMoviesGateway!!)
-            application.setup()
+            application.start()
             return application
         }
     }

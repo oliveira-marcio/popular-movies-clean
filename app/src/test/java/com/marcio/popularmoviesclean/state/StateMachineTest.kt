@@ -15,7 +15,9 @@ class StateMachineTest {
             TestErrorFactory(),
             State(State.Name.IDLE),
             mutableListOf()
-        ) {}
+        ) {
+            override fun start() {}
+        }
         val listenerMock = mockk<StateListener<TestValue, TestError>>(relaxed = true)
 
         stateMachine.addStateChangedListener(listenerMock)
@@ -33,7 +35,9 @@ class StateMachineTest {
             TestErrorFactory(),
             State(State.Name.IDLE),
             mutableListOf()
-        ) {}
+        ) {
+            override fun start() {}
+        }
         val listenerMock = mockk<StateListener<TestValue, TestError>>(relaxed = true)
 
         stateMachine.addStateChangedListener(listenerMock)
@@ -55,7 +59,9 @@ class StateMachineTest {
             TestErrorFactory(),
             State(State.Name.IDLE),
             mutableListOf()
-        ) {}
+        ) {
+            override fun start() {}
+        }
         val firstListenerMock = mockk<StateListener<TestValue, TestError>>(relaxed = true)
         val secondListenerMock = mockk<StateListener<TestValue, TestError>>(relaxed = true)
 
@@ -79,7 +85,9 @@ class StateMachineTest {
             TestErrorFactory(),
             State(State.Name.IDLE),
             mutableListOf()
-        ) {}
+        ) {
+            override fun start() {}
+        }
         val firstListenerMock = mockk<StateListener<TestValue, TestError>>(relaxed = true)
         val secondListenerMock = mockk<StateListener<TestValue, TestError>>(relaxed = true)
 
@@ -107,7 +115,9 @@ class StateMachineTest {
             TestErrorFactory(),
             State(State.Name.IDLE),
             mutableListOf()
-        ) {}
+        ) {
+            override fun start() {}
+        }
         val mockListener = mockk<StateListener<TestValue, TestError>>(relaxed = true)
 
         stateMachine.addStateChangedListener(mockListener)
@@ -128,7 +138,9 @@ class StateMachineTest {
             TestErrorFactory(error),
             State(State.Name.LOADED, value),
             mutableListOf()
-        ) {}
+        ) {
+            override fun start() {}
+        }
         val mockListener = mockk<StateListener<TestValue, TestError>>(relaxed = true)
 
         stateMachine.addStateChangedListener(mockListener)
@@ -148,7 +160,9 @@ class StateMachineTest {
             TestErrorFactory(),
             State(State.Name.LOADING),
             mutableListOf()
-        ) {}
+        ) {
+            override fun start() {}
+        }
         val mockListener = mockk<StateListener<TestValue, TestError>>(relaxed = true)
 
         stateMachine.addStateChangedListener(mockListener)
@@ -168,7 +182,9 @@ class StateMachineTest {
             TestErrorFactory(),
             State(State.Name.IDLE),
             mutableListOf()
-        ) {}
+        ) {
+            override fun start() {}
+        }
         val firstListenerMock = mockk<StateListener<TestValue, TestError>>(relaxed = true)
         val secondListenerMock = mockk<StateListener<TestValue, TestError>>(relaxed = true)
 

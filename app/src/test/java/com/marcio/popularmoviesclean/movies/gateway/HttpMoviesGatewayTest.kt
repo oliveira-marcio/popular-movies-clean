@@ -16,7 +16,7 @@ class HttpMoviesGatewayTest {
         server.start()
         server.enqueue(MockResponse().setResponseCode(200).setBody("{}"))
 
-        val moviesList = TestData.MOVIES
+        val moviesList = TestData.POPULAR_MOVIES
         val baseUrl = server.url("/").toString()
 
         val service = HttpMoviesGateway(
@@ -33,6 +33,8 @@ class HttpMoviesGatewayTest {
 
         assertEquals("GET", request.method)
         assertEquals("/popular/movies?api_key=123&language=pt-BR", request.path)
+
+        server.shutdown()
     }
 
     @Test
@@ -41,7 +43,7 @@ class HttpMoviesGatewayTest {
         server.start()
         server.enqueue(MockResponse().setResponseCode(200).setBody("{}"))
 
-        val moviesList = TestData.MOVIES
+        val moviesList = TestData.POPULAR_MOVIES
         val baseUrl = server.url("/").toString()
 
         val service = HttpMoviesGateway(
@@ -58,6 +60,8 @@ class HttpMoviesGatewayTest {
 
         assertEquals("GET", request.method)
         assertEquals("/top_rated/movies?api_key=123&language=pt-BR", request.path)
+
+        server.shutdown()
     }
 
     @Test

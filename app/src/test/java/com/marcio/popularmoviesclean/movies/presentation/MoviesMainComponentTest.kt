@@ -25,12 +25,13 @@ import org.robolectric.annotation.Config
 @RunWith(AndroidJUnit4::class)
 @Config(application = TestApplication::class)
 class MoviesMainComponentTest {
+
     @get:Rule
     val rule: ActivityTestRule<TestActivity> = ActivityTestRule(TestActivity::class.java)
 
     @Test
     fun `Given available movies When main screen appears Then show movies list`() {
-        val moviesJson = TestData.JSON_MOVIES_RESPONSE.trimIndent()
+        val moviesJson = TestData.JSON_POPULAR_MOVIES_RESPONSE.trimIndent()
         val server = MockWebServer()
         server.start()
         server.enqueue(MockResponse().setResponseCode(200).setBody(moviesJson))
@@ -47,11 +48,13 @@ class MoviesMainComponentTest {
                 )
             })
             .registerDispatcherFactory(lazy { FakeDispatcherFactory() })
-            .setup()
+            .start()
 
         rule.activity.showFragment(MoviesMainFragment())
 
         onView(withText("Suicide Squad")).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
         onView(withText("Jason Bourne")).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+
+        server.shutdown()
     }
 }

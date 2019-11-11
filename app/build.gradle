@@ -43,6 +43,10 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
     implementation "androidx.appcompat:appcompat:${jetpackAppCompatVersion}"
+    implementation "androidx.constraintlayout:constraintlayout:${constraintLayoutVersion}"
+    implementation "androidx.recyclerview:recyclerview:${androidJetpackVersion}"
+    implementation "com.google.android.material:material:${androidJetpackVersion}"
+    implementation "androidx.legacy:legacy-support-v4:${androidJetpackVersion}"
     implementation "androidx.core:core-ktx:${jetpackAppCompatVersion}"
     implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
 

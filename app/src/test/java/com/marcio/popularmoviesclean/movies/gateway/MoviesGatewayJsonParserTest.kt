@@ -13,8 +13,8 @@ import org.robolectric.annotation.Config
 class MoviesGatewayJsonParserTest {
     @Test
     fun `Given a movies json When parser is called Then should return a list of movies`() {
-        val json = TestData.JSON_MOVIES_RESPONSE.trimIndent()
-        val moviesList = TestData.MOVIES
+        val json = TestData.JSON_POPULAR_MOVIES_RESPONSE.trimIndent()
+        val moviesList = TestData.POPULAR_MOVIES
         val jsonParser = MoviesGatewayJsonParser()
 
         assertEquals(moviesList, jsonParser.parseMovies(json))

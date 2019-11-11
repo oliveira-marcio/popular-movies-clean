@@ -1,7 +1,7 @@
 package com.marcio.popularmoviesclean.movies.presentation
 
 interface MoviesMainView {
-    fun showMovies(viewModel: MoviesListViewModel)
+    fun showMovies(listViewModel: MoviesListViewModel)
     fun hideMovies()
     fun showLoading()
     fun hideLoading()
