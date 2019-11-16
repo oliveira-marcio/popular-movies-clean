@@ -1,9 +1,9 @@
 package com.marcio.popularmoviesclean
 
-import com.marcio.popularmoviesclean.movies.MoviesStateMachine
-import com.marcio.popularmoviesclean.state.Dispatcher
+import com.marcio.popularmoviesclean.movies.MoviesMainUseCases
+import com.marcio.popularmoviesclean.movies.presentation.MoviesMainPresenter
 
 interface DependencyManager {
-    val mainDispatcher: Dispatcher
-    val moviesStateMachine: MoviesStateMachine
+    val moviesMainUseCases: MoviesMainUseCases
+    val moviesMainPresenter: MoviesMainPresenter
 }

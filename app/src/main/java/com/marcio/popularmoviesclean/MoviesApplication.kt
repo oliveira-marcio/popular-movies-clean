@@ -3,6 +3,7 @@ package com.marcio.popularmoviesclean
 import com.marcio.popularmoviesclean.movies.MoviesStateMachine
 import com.marcio.popularmoviesclean.movies.gateway.MoviesGateway
 import com.marcio.popularmoviesclean.movies.gateway.MoviesGatewayErrorFactory
+import com.marcio.popularmoviesclean.movies.presentation.MoviesMainPresenter
 import com.marcio.popularmoviesclean.state.DispatcherFactory
 
 class MoviesApplication private constructor(
@@ -10,11 +11,20 @@ class MoviesApplication private constructor(
     lazyMoviesGateway: Lazy<MoviesGateway>
 ) : DependencyManager {
 
-    override val mainDispatcher by lazy {
-        lazyDispatcherFactory.value.createMainDispatcher()
+    override val moviesMainUseCases by lazy {
+        moviesStateMachine
     }
 
-    override val moviesStateMachine: MoviesStateMachine by lazy {
+    override val moviesMainPresenter by lazy {
+        val presenter = MoviesMainPresenter(
+            lazyDispatcherFactory.value.createMainDispatcher(),
+            -1 // TODO: Should be a real resource
+        )
+        moviesStateMachine.addStateChangedListener(presenter)
+        presenter
+    }
+
+    private val moviesStateMachine: MoviesStateMachine by lazy {
         MoviesStateMachine(
             lazyMoviesGateway.value,
             lazyDispatcherFactory.value.createSerialDispatcher("Movies"),

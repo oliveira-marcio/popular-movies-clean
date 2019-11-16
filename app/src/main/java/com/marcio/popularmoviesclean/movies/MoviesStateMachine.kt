@@ -11,18 +11,18 @@ class MoviesStateMachine(
     private val moviesGateway: MoviesGateway,
     dispatcher: Dispatcher,
     errorFactory: ErrorFactory<MoviesGatewayError>
-) : StateMachine<Movies, MoviesGatewayError>(dispatcher, errorFactory) {
+) : MoviesMainUseCases, StateMachine<Movies, MoviesGatewayError>(dispatcher, errorFactory) {
     override fun start() {
         loadPopularMovies()
     }
 
-    fun loadPopularMovies() {
+    override fun loadPopularMovies() {
         loadNewState {
             Movies(moviesGateway.getPopularMovies())
         }
     }
 
-    fun loadTopRatedMovies() {
+    override fun loadTopRatedMovies() {
         loadNewState {
             Movies(moviesGateway.getTopRatedMovies())
         }

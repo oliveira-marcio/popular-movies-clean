@@ -21,20 +21,8 @@ class MoviesMainFragment : Fragment(), MoviesMainView {
     private var adapter: MoviesListAdapter? = null
     private var layoutManager: LinearLayoutManager? = null
 
-    private val mainDispatcher by lazy {
-        dependencyManager!!.mainDispatcher
-    }
-
-    private val moviesStateMachine by lazy {
-        dependencyManager!!.moviesStateMachine
-    }
-
-    private val presenter by lazy {
-        MoviesMainPresenter(
-            mainDispatcher,
-            this,
-            -1 // TODO: Should be a real resource
-        )
+    private val moviesMainPresenter by lazy {
+        dependencyManager!!.moviesMainPresenter
     }
 
     override fun onAttach(context: Context) {
@@ -62,11 +50,11 @@ class MoviesMainFragment : Fragment(), MoviesMainView {
 
     override fun onResume() {
         super.onResume()
-        moviesStateMachine.addStateChangedListener(presenter)
+        moviesMainPresenter.attachView(this)
     }
 
     override fun onPause() {
-        moviesStateMachine.removeStateChangedListener(presenter)
+        moviesMainPresenter.detachView()
         super.onPause()
     }
 
