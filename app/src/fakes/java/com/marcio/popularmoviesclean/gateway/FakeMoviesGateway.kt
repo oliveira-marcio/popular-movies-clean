@@ -8,7 +8,7 @@ class FakeMoviesGateway(
     private val topRatedMovies: List<Movie> = emptyList()
 ) : MoviesGateway {
 
-    override fun getPopularMovies() = popularMovies
+    override fun getPopularMovies(page: Int) = if (page == 1) popularMovies else topRatedMovies
 
-    override fun getTopRatedMovies() = topRatedMovies
+    override fun getTopRatedMovies(page: Int) = if (page == 1) topRatedMovies else popularMovies
 }

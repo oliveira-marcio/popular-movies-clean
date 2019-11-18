@@ -11,13 +11,13 @@ class HttpMoviesGateway(
     private val httpClient: OkHttpClient,
     private val gatewayParser: MoviesGatewayParser
 ) : MoviesGateway {
-    override fun getPopularMovies() = getMovies("popular")
+    override fun getPopularMovies(page: Int) = getMovies("popular", page)
 
-    override fun getTopRatedMovies() = getMovies("top_rated")
+    override fun getTopRatedMovies(page: Int) = getMovies("top_rated", page)
 
-    private fun getMovies(path: String): List<Movie> {
+    private fun getMovies(path: String, page: Int): List<Movie> {
         val request = Request.Builder()
-            .url("${baseUrl}$path/movies?api_key=$apiKey&language=$locale")
+            .url("${baseUrl}$path/movies?api_key=$apiKey&language=$locale&page=$page")
             .get()
             .build()
 

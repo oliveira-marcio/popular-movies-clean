@@ -78,4 +78,52 @@ class MoviesStateMachineTest {
             listenerMock.onStateChanged(State(State.Name.LOADED, Movies(topRatedMoviesList)))
         }
     }
+
+    @Test
+    fun `Given movies gateway returns the next list of popular movies When load more popular movies is called Then emit list of popular movies plus the next movies`() {
+
+        val popularMoviesList = TestData.POPULAR_MOVIES
+        val topRatedMoviesList = TestData.TOP_RATED_MOVIES
+        val allMoviesList = popularMoviesList + topRatedMoviesList
+        val moviesStateMachine = MoviesStateMachine(
+            FakeMoviesGateway(popularMoviesList, topRatedMoviesList),
+            FakeDispatcher(),
+            FakeMoviesGatewayErrorFactory()
+        )
+
+        val listenerMock = mockk<StateListener<Movies, MoviesGatewayError>>(relaxed = true)
+        moviesStateMachine.addStateChangedListener(listenerMock)
+        moviesStateMachine.loadPopularMovies()
+        moviesStateMachine.loadMorePopularMovies()
+
+        verifyOrder {
+            listenerMock.onStateChanged(State(State.Name.LOADED, Movies(popularMoviesList)))
+            listenerMock.onStateChanged(State(State.Name.LOADING, Movies(popularMoviesList)))
+            listenerMock.onStateChanged(State(State.Name.LOADED, Movies(allMoviesList)))
+        }
+    }
+
+    @Test
+    fun `Given movies gateway returns the next list of top rated movies When load more top rated movies is called Then emit list of top rated movies plus the next movies`() {
+
+        val popularMoviesList = TestData.POPULAR_MOVIES
+        val topRatedMoviesList = TestData.TOP_RATED_MOVIES
+        val allMoviesList = topRatedMoviesList + popularMoviesList
+        val moviesStateMachine = MoviesStateMachine(
+            FakeMoviesGateway(popularMoviesList, topRatedMoviesList),
+            FakeDispatcher(),
+            FakeMoviesGatewayErrorFactory()
+        )
+
+        val listenerMock = mockk<StateListener<Movies, MoviesGatewayError>>(relaxed = true)
+        moviesStateMachine.addStateChangedListener(listenerMock)
+        moviesStateMachine.loadTopRatedMovies()
+        moviesStateMachine.loadMoreTopRatedMovies()
+
+        verifyOrder {
+            listenerMock.onStateChanged(State(State.Name.LOADED, Movies(topRatedMoviesList)))
+            listenerMock.onStateChanged(State(State.Name.LOADING, Movies(topRatedMoviesList)))
+            listenerMock.onStateChanged(State(State.Name.LOADED, Movies(allMoviesList)))
+        }
+    }
 }

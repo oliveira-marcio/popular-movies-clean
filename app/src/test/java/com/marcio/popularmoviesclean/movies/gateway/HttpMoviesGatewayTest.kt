@@ -32,7 +32,7 @@ class HttpMoviesGatewayTest {
         val request = server.takeRequest()
 
         assertEquals("GET", request.method)
-        assertEquals("/popular/movies?api_key=123&language=pt-BR", request.path)
+        assertEquals("/popular/movies?api_key=123&language=pt-BR&page=1", request.path)
 
         server.shutdown()
     }
@@ -59,7 +59,7 @@ class HttpMoviesGatewayTest {
         val request = server.takeRequest()
 
         assertEquals("GET", request.method)
-        assertEquals("/top_rated/movies?api_key=123&language=pt-BR", request.path)
+        assertEquals("/top_rated/movies?api_key=123&language=pt-BR&page=1", request.path)
 
         server.shutdown()
     }
@@ -85,6 +85,60 @@ class HttpMoviesGatewayTest {
             Assert.fail("Should throw an illegal state exception")
         } catch (_: IllegalStateException) {
         }
+
+        server.shutdown()
+    }
+
+    @Test
+    fun `Given there is internet connection When get popular movies is called with page 2 Then TMDB API with popular path is called with GET method And page parameter equals 2`() {
+        val server = MockWebServer()
+        server.start()
+        server.enqueue(MockResponse().setResponseCode(200).setBody("{}"))
+
+        val moviesList = TestData.POPULAR_MOVIES
+        val baseUrl = server.url("/").toString()
+
+        val service = HttpMoviesGateway(
+            baseUrl,
+            "123",
+            "pt-BR",
+            OkHttpClient(),
+            FakeMoviesGatewayJsonParser(moviesList)
+        )
+
+        assertEquals(moviesList, service.getPopularMovies(2))
+
+        val request = server.takeRequest()
+
+        assertEquals("GET", request.method)
+        assertEquals("/popular/movies?api_key=123&language=pt-BR&page=2", request.path)
+
+        server.shutdown()
+    }
+
+    @Test
+    fun `Given there is internet connection When get top rated movies is called with page 2 Then TMDB API with top rated path is called with GET method And page parameter equals 2`() {
+        val server = MockWebServer()
+        server.start()
+        server.enqueue(MockResponse().setResponseCode(200).setBody("{}"))
+
+        val moviesList = TestData.TOP_RATED_MOVIES
+        val baseUrl = server.url("/").toString()
+
+        val service = HttpMoviesGateway(
+            baseUrl,
+            "123",
+            "pt-BR",
+            OkHttpClient(),
+            FakeMoviesGatewayJsonParser(moviesList)
+        )
+
+        assertEquals(moviesList, service.getTopRatedMovies(2))
+
+        val request = server.takeRequest()
+
+        assertEquals("GET", request.method)
+        assertEquals("/top_rated/movies?api_key=123&language=pt-BR&page=2", request.path)
 
         server.shutdown()
     }
