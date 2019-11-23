@@ -21,10 +21,6 @@ import kotlinx.android.synthetic.main.fragment_movies_main.moviesList
 
 class MoviesMainFragment : Fragment(), MoviesMainView {
 
-    companion object {
-        const val LOAD_POPULAR_MOVIES = "LOAD_POPULAR_MOVIES"
-    }
-
     private var dependencyManager: DependencyManager? = null
 
     private var adapter: MoviesListAdapter? = null
@@ -37,13 +33,6 @@ class MoviesMainFragment : Fragment(), MoviesMainView {
 
     private val moviesMainPresenter by lazy {
         dependencyManager!!.moviesMainPresenter
-    }
-
-    private var loadPopularMovies: Boolean = true
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        outState.putBoolean(LOAD_POPULAR_MOVIES, loadPopularMovies)
-        super.onSaveInstanceState(outState)
     }
 
     override fun onAttach(context: Context) {
@@ -72,13 +61,6 @@ class MoviesMainFragment : Fragment(), MoviesMainView {
     ): View? {
         setHasOptionsMenu(true)
         return inflater.inflate(R.layout.fragment_movies_main, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        if (savedInstanceState != null) {
-            loadPopularMovies = savedInstanceState.getBoolean(LOAD_POPULAR_MOVIES)
-        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -128,20 +110,14 @@ class MoviesMainFragment : Fragment(), MoviesMainView {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.actionRefresh -> {
-                if (loadPopularMovies) {
-                    moviesMainUseCases.loadMovies()
-                } else {
-                    moviesMainUseCases.loadMovies(Movies.Category.TOP_RATED)
-                }
+                moviesMainUseCases.reloadMovies()
                 return true
             }
             R.id.actionPopular -> {
-                loadPopularMovies = true
                 moviesMainUseCases.loadMovies()
                 return true
             }
             R.id.actionTopRated -> {
-                loadPopularMovies = false
                 moviesMainUseCases.loadMovies(Movies.Category.TOP_RATED)
                 return true
             }

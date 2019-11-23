@@ -26,6 +26,15 @@ class MoviesStateMachine(
         }
     }
 
+    override fun reloadMovies() {
+        val movies = currentState.value
+        if (movies == null) {
+            loadMovies()
+        } else {
+            loadMovies(currentState.value!!.selectedCategory)
+        }
+    }
+
     override fun loadMoreMovies() {
         loadNewState {
             val movies = currentState.value!!

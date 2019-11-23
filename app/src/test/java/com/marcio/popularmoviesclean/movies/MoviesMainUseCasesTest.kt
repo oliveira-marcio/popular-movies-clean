@@ -79,10 +79,9 @@ class MoviesMainUseCasesTest {
     @Test
     fun `Given movies gateway returns a list of movies When load top rated movies is called Then emit loaded state And the list of movies`() {
 
-        val popularMoviesList = TestData.POPULAR_MOVIES
         val topRatedMoviesList = TestData.TOP_RATED_MOVIES
         val moviesStateMachine = MoviesStateMachine(
-            FakeMoviesGateway(popularMoviesList, topRatedMoviesList),
+            FakeMoviesGateway(topRatedMovies = topRatedMoviesList),
             FakeDispatcher(),
             FakeMoviesGatewayErrorFactory()
         )
@@ -96,13 +95,13 @@ class MoviesMainUseCasesTest {
             listenerMock.onStateChanged(
                 State(
                     State.Name.LOADED,
-                    Movies(popularMoviesList, Movies.Category.POPULAR)
+                    Movies(emptyList(), Movies.Category.POPULAR)
                 )
             )
             listenerMock.onStateChanged(
                 State(
                     State.Name.LOADING,
-                    Movies(popularMoviesList, Movies.Category.POPULAR)
+                    Movies(emptyList(), Movies.Category.POPULAR)
                 )
             )
             listenerMock.onStateChanged(
@@ -115,13 +114,112 @@ class MoviesMainUseCasesTest {
     }
 
     @Test
-    fun `Given movies gateway returns the next list of popular movies When load more popular movies is called Then emit list of popular movies plus the next movies`() {
+    fun `Given current category is top rated And movies gateway returns a list of movies When reload movies is called Then emit list of top rated movies`() {
+
+        val topRatedMoviesList = TestData.TOP_RATED_MOVIES
+        val moviesStateMachine = MoviesStateMachine(
+            FakeMoviesGateway(topRatedMovies = topRatedMoviesList),
+            FakeDispatcher(),
+            FakeMoviesGatewayErrorFactory()
+        )
+
+        val listenerMock = mockk<StateListener<Movies, MoviesGatewayError>>(relaxed = true)
+        moviesStateMachine.addStateChangedListener(listenerMock)
+        moviesStateMachine.start()
+        moviesStateMachine.loadMovies(Movies.Category.TOP_RATED)
+        moviesStateMachine.reloadMovies()
+
+        verifyOrder {
+            listenerMock.onStateChanged(
+                State(
+                    State.Name.LOADED,
+                    Movies(topRatedMoviesList, Movies.Category.TOP_RATED)
+                )
+            )
+            listenerMock.onStateChanged(
+                State(
+                    State.Name.LOADING,
+                    Movies(topRatedMoviesList, Movies.Category.TOP_RATED)
+                )
+            )
+            listenerMock.onStateChanged(
+                State(
+                    State.Name.LOADED,
+                    Movies(topRatedMoviesList, Movies.Category.TOP_RATED)
+                )
+            )
+        }
+    }
+
+    @Test
+    fun `Given current category is popular And movies gateway returns a list of movies When reload movies is called Then emit list of popular movies`() {
 
         val popularMoviesList = TestData.POPULAR_MOVIES
-        val topRatedMoviesList = TestData.TOP_RATED_MOVIES
-        val allMoviesList = popularMoviesList + topRatedMoviesList
         val moviesStateMachine = MoviesStateMachine(
-            FakeMoviesGateway(popularMoviesList, topRatedMoviesList),
+            FakeMoviesGateway(popularMoviesList),
+            FakeDispatcher(),
+            FakeMoviesGatewayErrorFactory()
+        )
+
+        val listenerMock = mockk<StateListener<Movies, MoviesGatewayError>>(relaxed = true)
+        moviesStateMachine.addStateChangedListener(listenerMock)
+        moviesStateMachine.start()
+        moviesStateMachine.reloadMovies()
+
+        verifyOrder {
+            listenerMock.onStateChanged(
+                State(
+                    State.Name.LOADED,
+                    Movies(popularMoviesList, Movies.Category.POPULAR)
+                )
+            )
+            listenerMock.onStateChanged(
+                State(
+                    State.Name.LOADING,
+                    Movies(popularMoviesList, Movies.Category.POPULAR)
+                )
+            )
+            listenerMock.onStateChanged(
+                State(
+                    State.Name.LOADED,
+                    Movies(popularMoviesList, Movies.Category.POPULAR)
+                )
+            )
+        }
+    }
+
+    @Test
+    fun `Given current state is null When reload movies is called Then emit list of popular movies`() {
+
+        val popularMoviesList = TestData.POPULAR_MOVIES
+        val moviesStateMachine = MoviesStateMachine(
+            FakeMoviesGateway(popularMoviesList),
+            FakeDispatcher(),
+            FakeMoviesGatewayErrorFactory()
+        )
+
+        val listenerMock = mockk<StateListener<Movies, MoviesGatewayError>>(relaxed = true)
+        moviesStateMachine.addStateChangedListener(listenerMock)
+        moviesStateMachine.reloadMovies()
+
+        verifyOrder {
+            listenerMock.onStateChanged(
+                State(
+                    State.Name.LOADED,
+                    Movies(popularMoviesList, Movies.Category.POPULAR)
+                )
+            )
+        }
+    }
+
+    @Test
+    fun `Given movies gateway returns the next list of popular movies When load more movies is called Then emit list of popular movies plus the next movies`() {
+
+        val firstMoviesList = TestData.POPULAR_MOVIES
+        val secondMoviesList = TestData.TOP_RATED_MOVIES
+        val allMoviesList = firstMoviesList + secondMoviesList
+        val moviesStateMachine = MoviesStateMachine(
+            FakeMoviesGateway(firstMoviesList, secondMoviesList),
             FakeDispatcher(),
             FakeMoviesGatewayErrorFactory()
         )
@@ -135,13 +233,13 @@ class MoviesMainUseCasesTest {
             listenerMock.onStateChanged(
                 State(
                     State.Name.LOADED,
-                    Movies(popularMoviesList, Movies.Category.POPULAR)
+                    Movies(firstMoviesList, Movies.Category.POPULAR)
                 )
             )
             listenerMock.onStateChanged(
                 State(
                     State.Name.LOADING,
-                    Movies(popularMoviesList, Movies.Category.POPULAR)
+                    Movies(firstMoviesList, Movies.Category.POPULAR)
                 )
             )
             listenerMock.onStateChanged(
@@ -154,13 +252,13 @@ class MoviesMainUseCasesTest {
     }
 
     @Test
-    fun `Given movies gateway returns the next list of top rated movies When load more top rated movies is called Then emit list of top rated movies plus the next movies`() {
+    fun `Given movies gateway returns the next list of top rated movies When load more movies is called Then emit list of top rated movies plus the next movies`() {
 
-        val popularMoviesList = TestData.POPULAR_MOVIES
-        val topRatedMoviesList = TestData.TOP_RATED_MOVIES
-        val allMoviesList = topRatedMoviesList + popularMoviesList
+        val firstMoviesList = TestData.TOP_RATED_MOVIES
+        val secondMoviesList = TestData.POPULAR_MOVIES
+        val allMoviesList = firstMoviesList + secondMoviesList
         val moviesStateMachine = MoviesStateMachine(
-            FakeMoviesGateway(popularMoviesList, topRatedMoviesList),
+            FakeMoviesGateway(secondMoviesList, firstMoviesList),
             FakeDispatcher(),
             FakeMoviesGatewayErrorFactory()
         )
@@ -174,19 +272,49 @@ class MoviesMainUseCasesTest {
             listenerMock.onStateChanged(
                 State(
                     State.Name.LOADED,
-                    Movies(topRatedMoviesList, Movies.Category.TOP_RATED)
+                    Movies(firstMoviesList, Movies.Category.TOP_RATED)
                 )
             )
             listenerMock.onStateChanged(
                 State(
                     State.Name.LOADING,
-                    Movies(topRatedMoviesList, Movies.Category.TOP_RATED)
+                    Movies(firstMoviesList, Movies.Category.TOP_RATED)
                 )
             )
             listenerMock.onStateChanged(
                 State(
                     State.Name.LOADED,
                     Movies(allMoviesList, Movies.Category.TOP_RATED)
+                )
+            )
+        }
+    }
+
+    @Test
+    fun `Given movies list is empty When load more movies is called Then emit empty list`() {
+
+        val moviesStateMachine = MoviesStateMachine(
+            FakeMoviesGateway(),
+            FakeDispatcher(),
+            FakeMoviesGatewayErrorFactory()
+        )
+
+        val listenerMock = mockk<StateListener<Movies, MoviesGatewayError>>(relaxed = true)
+        moviesStateMachine.addStateChangedListener(listenerMock)
+        moviesStateMachine.loadMovies()
+        moviesStateMachine.loadMoreMovies()
+
+        verifyOrder {
+            listenerMock.onStateChanged(
+                State(
+                    State.Name.LOADED,
+                    Movies(emptyList(), Movies.Category.POPULAR)
+                )
+            )
+            listenerMock.onStateChanged(
+                State(
+                    State.Name.LOADED,
+                    Movies(emptyList(), Movies.Category.POPULAR)
                 )
             )
         }
