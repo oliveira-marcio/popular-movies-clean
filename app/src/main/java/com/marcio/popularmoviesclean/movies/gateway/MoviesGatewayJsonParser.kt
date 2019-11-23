@@ -14,12 +14,12 @@ class MoviesGatewayJsonParser : MoviesGatewayParser {
             val movieObject = moviesArray.getJSONObject(index)
             moviesList.add(
                 Movie(
-                    movieObject.getString("original_title"),
-                    movieObject.getString("poster_path"),
-                    movieObject.getString("overview"),
-                    movieObject.getDouble("vote_average"),
-                    movieObject.getInt("vote_count"),
-                    movieObject.getString("release_date")
+                    movieObject.optString("title"),
+                    movieObject.optString("poster_path"),
+                    movieObject.optString("overview"),
+                    movieObject.optDouble("vote_average"),
+                    movieObject.optInt("vote_count"),
+                    movieObject.optString("release_date")
                 )
             )
         }

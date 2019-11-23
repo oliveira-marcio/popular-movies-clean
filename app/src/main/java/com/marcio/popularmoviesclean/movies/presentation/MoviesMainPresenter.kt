@@ -1,6 +1,5 @@
 package com.marcio.popularmoviesclean.movies.presentation
 
-import androidx.annotation.DrawableRes
 import com.marcio.popularmoviesclean.movies.MoviesMainUseCases
 import com.marcio.popularmoviesclean.movies.gateway.MoviesGatewayError
 import com.marcio.popularmoviesclean.movies.models.Movies
@@ -12,9 +11,9 @@ import com.marcio.popularmoviesclean.state.StateListener
 class MoviesMainPresenter(
     private val moviesMainUseCases: MoviesMainUseCases,
     private val mainDispatcher: Dispatcher,
-    @DrawableRes private val imagePlaceHolderResource: Int,
     private val listItemOffset: Int
-) : Presenter<MoviesMainView>(), StateListener<Movies, MoviesGatewayError> {
+) : Presenter<MoviesMainView, MovieItemPlaceHolder>(),
+    StateListener<Movies, MoviesGatewayError> {
 
     private var currentState: State<Movies, MoviesGatewayError>? = null
 
@@ -27,6 +26,10 @@ class MoviesMainPresenter(
         if (currentState == null) {
             return
         }
+
+// TODO:
+//  - Add loading progress bar to bottom of list on loading more (replacing main loading)
+//  - If there's already movies loaded, don't hide list on error (show a Toast, for example)
 
         mainDispatcher.dispatch {
             when (currentState!!.name) {
@@ -44,7 +47,7 @@ class MoviesMainPresenter(
                     view?.showMovies(
                         MoviesListViewModel(
                             currentState!!.value!!,
-                            imagePlaceHolderResource
+                            placeHolder!!
                         )
                     )
                 }

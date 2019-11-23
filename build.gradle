@@ -18,6 +18,8 @@ buildscript {
         mockkVersion = '1.8.13'
         okHttpVersion = '3.11.0'
         robolectricVersion = '4.1'
+        rxJavaVersion = '2.1.9'
+        rxJavaAndroidVersion = '2.1.0'
         supportTestRunnerVersion = '1.1.0'
         supportTestRulesVersion = '1.1.0'
     }

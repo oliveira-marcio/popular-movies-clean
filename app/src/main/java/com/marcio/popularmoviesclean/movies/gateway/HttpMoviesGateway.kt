@@ -23,7 +23,7 @@ class HttpMoviesGateway(
         page: Int
     ): List<Movie> {
         val request = Request.Builder()
-            .url("${baseUrl}${pathMap.getValue(category)}/movies?api_key=$apiKey&language=$locale&page=$page")
+            .url("${baseUrl}${pathMap.getValue(category)}?api_key=$apiKey&language=$locale&page=$page")
             .get()
             .build()
 

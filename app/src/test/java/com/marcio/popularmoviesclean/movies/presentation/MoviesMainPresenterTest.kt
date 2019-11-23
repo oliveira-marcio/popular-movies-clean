@@ -16,15 +16,15 @@ class MoviesMainPresenterTest {
     @Test
     fun `Given movies are loaded When state is updated Then show movies And hide main loading and error`() {
         val viewMock = mockk<MoviesMainView>(relaxed = true)
+        val placeHolder = MovieItemPlaceHolder("", 123)
         val presenter = MoviesMainPresenter(
             mockk(),
             FakeDispatcher(),
-            123,
             5
         )
         val movies = Movies(TestData.POPULAR_MOVIES)
 
-        presenter.attachView(viewMock)
+        presenter.attachView(viewMock, placeHolder)
         presenter.onStateChanged(
             State(
                 State.Name.LOADED,
@@ -35,17 +35,17 @@ class MoviesMainPresenterTest {
         verifySequence {
             viewMock.hideLoading()
             viewMock.hideError()
-            viewMock.showMovies(MoviesListViewModel(movies, 123))
+            viewMock.showMovies(MoviesListViewModel(movies, placeHolder))
         }
     }
 
     @Test
     fun `Given movies are loaded When view is attached after state is updated Then show movies And hide main loading and error`() {
         val viewMock = mockk<MoviesMainView>(relaxed = true)
+        val placeHolder = MovieItemPlaceHolder("", 123)
         val presenter = MoviesMainPresenter(
             mockk(),
             FakeDispatcher(),
-            123,
             5
         )
         val movies = Movies(TestData.POPULAR_MOVIES)
@@ -56,12 +56,12 @@ class MoviesMainPresenterTest {
                 movies
             )
         )
-        presenter.attachView(viewMock)
+        presenter.attachView(viewMock, placeHolder)
 
         verifySequence {
             viewMock.hideLoading()
             viewMock.hideError()
-            viewMock.showMovies(MoviesListViewModel(movies, 123))
+            viewMock.showMovies(MoviesListViewModel(movies, placeHolder))
         }
     }
 
@@ -71,7 +71,6 @@ class MoviesMainPresenterTest {
         val presenter = MoviesMainPresenter(
             mockk(),
             FakeDispatcher(),
-            123,
             5
         )
         val movies = Movies(TestData.POPULAR_MOVIES)
@@ -100,11 +99,10 @@ class MoviesMainPresenterTest {
         val presenter = MoviesMainPresenter(
             mockk(),
             FakeDispatcher(),
-            123,
             5
         )
 
-        presenter.attachView(viewMock)
+        presenter.attachView(viewMock, MovieItemPlaceHolder("", 123))
 
         verify(exactly = 0) {
             viewMock.showMovies(any())
@@ -123,11 +121,10 @@ class MoviesMainPresenterTest {
         val presenter = MoviesMainPresenter(
             mockk(),
             FakeDispatcher(),
-            123,
             5
         )
 
-        presenter.attachView(viewMock)
+        presenter.attachView(viewMock, MovieItemPlaceHolder("", 123))
         presenter.onStateChanged(
             State(State.Name.LOADING)
         )
@@ -145,12 +142,11 @@ class MoviesMainPresenterTest {
         val presenter = MoviesMainPresenter(
             mockk(),
             FakeDispatcher(),
-            123,
             5
         )
         val movies = Movies(TestData.POPULAR_MOVIES)
 
-        presenter.attachView(viewMock)
+        presenter.attachView(viewMock, MovieItemPlaceHolder("", 123))
         presenter.onStateChanged(
             State(
                 State.Name.LOADING,
@@ -170,11 +166,10 @@ class MoviesMainPresenterTest {
         val presenter = MoviesMainPresenter(
             mockk(),
             FakeDispatcher(),
-            123,
             5
         )
 
-        presenter.attachView(viewMock)
+        presenter.attachView(viewMock, MovieItemPlaceHolder("", 123))
         presenter.onStateChanged(
             State(State.Name.ERROR, error = MoviesGatewayError(IOException()))
         )
@@ -192,11 +187,10 @@ class MoviesMainPresenterTest {
         val presenter = MoviesMainPresenter(
             mockk(),
             FakeDispatcher(),
-            123,
             5
         )
 
-        presenter.attachView(viewMock)
+        presenter.attachView(viewMock, MovieItemPlaceHolder("", 123))
         presenter.onStateChanged(
             State(State.Name.ERROR, error = MoviesGatewayError())
         )
@@ -214,7 +208,6 @@ class MoviesMainPresenterTest {
         val presenter = MoviesMainPresenter(
             moviesMainUseCasesMock,
             FakeDispatcher(),
-            123,
             5
         )
 
@@ -230,7 +223,6 @@ class MoviesMainPresenterTest {
         val presenter = MoviesMainPresenter(
             moviesMainUseCasesMock,
             FakeDispatcher(),
-            123,
             5
         )
 
@@ -246,7 +238,6 @@ class MoviesMainPresenterTest {
         val presenter = MoviesMainPresenter(
             moviesMainUseCasesMock,
             FakeDispatcher(),
-            123,
             5
         )
 

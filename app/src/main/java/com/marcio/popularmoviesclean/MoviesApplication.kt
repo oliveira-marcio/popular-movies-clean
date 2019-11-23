@@ -19,8 +19,7 @@ class MoviesApplication private constructor(
         val presenter = MoviesMainPresenter(
             moviesStateMachine,
             lazyDispatcherFactory.value.createMainDispatcher(),
-            -1, // TODO: Should be a real resource
-            5 // TODO: Should define correct value
+            BuildConfig.LIST_ITEM_OFFSET
         )
         moviesStateMachine.addStateChangedListener(presenter)
         presenter

@@ -33,7 +33,7 @@ class HttpMoviesGatewayIntegrationTest {
         val request = server.takeRequest()
 
         assertEquals("GET", request.method)
-        assertEquals("/popular/movies?api_key=123&language=pt-BR&page=1", request.path)
+        assertEquals("/popular?api_key=123&language=pt-BR&page=1", request.path)
 
         server.shutdown()
     }
@@ -60,7 +60,7 @@ class HttpMoviesGatewayIntegrationTest {
         val request = server.takeRequest()
 
         assertEquals("GET", request.method)
-        assertEquals("/top_rated/movies?api_key=123&language=pt-BR&page=1", request.path)
+        assertEquals("/top_rated?api_key=123&language=pt-BR&page=1", request.path)
 
         server.shutdown()
     }
@@ -112,7 +112,7 @@ class HttpMoviesGatewayIntegrationTest {
         val request = server.takeRequest()
 
         assertEquals("GET", request.method)
-        assertEquals("/popular/movies?api_key=123&language=pt-BR&page=2", request.path)
+        assertEquals("/popular?api_key=123&language=pt-BR&page=2", request.path)
 
         server.shutdown()
     }
@@ -139,7 +139,7 @@ class HttpMoviesGatewayIntegrationTest {
         val request = server.takeRequest()
 
         assertEquals("GET", request.method)
-        assertEquals("/top_rated/movies?api_key=123&language=pt-BR&page=2", request.path)
+        assertEquals("/top_rated?api_key=123&language=pt-BR&page=2", request.path)
 
         server.shutdown()
     }

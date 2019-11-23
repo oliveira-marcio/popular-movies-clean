@@ -75,7 +75,13 @@ class MoviesMainFragment : Fragment(), MoviesMainView {
 
     override fun onResume() {
         super.onResume()
-        moviesMainPresenter.attachView(this)
+        moviesMainPresenter.attachView(
+            this,
+            MovieItemPlaceHolder(
+                getString(R.string.movie_title_placeholder),
+                -1 // TODO: Should be a real resource
+            )
+        )
         moviesList.addOnScrollListener(scrollListener!!)
     }
 

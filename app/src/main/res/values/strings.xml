@@ -5,4 +5,5 @@
     <string name="action_refresh">Refresh</string>
     <string name="action_popular">Popular Movies</string>
     <string name="action_top_rated">Top Rated Movies</string>
+    <string name="movie_title_placeholder">Title not available</string>
 </resources>

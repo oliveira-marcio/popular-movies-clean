@@ -1,16 +1,20 @@
 package com.marcio.popularmoviesclean.state
 
-abstract class Presenter<T> {
+abstract class Presenter<V, P> {
 
-    protected var view: T? = null
+    protected var view: V? = null
+    protected var placeHolder: P? = null
+
     protected abstract fun updateView()
 
-    fun attachView(view: T) {
+    fun attachView(view: V, placeHolder: P? = null) {
         this.view = view
+        this.placeHolder = placeHolder
         updateView()
     }
 
     fun detachView() {
         view = null
+        placeHolder = null
     }
 }

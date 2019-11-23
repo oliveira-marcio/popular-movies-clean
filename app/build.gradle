@@ -2,6 +2,15 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
+/**
+ * Return Gradle property and if missing fallback to an environment variable with the same name.
+ * @param property the property name.
+ * @return the property value.
+ */
+def getPropertyWithFallback(String property) {
+    return hasProperty(property) ? findProperty(property) : System.getenv(property)
+}
+
 android {
     buildToolsVersion androidBuildToolsVersion
     compileSdkVersion compileAndroidSDkVersion
@@ -14,6 +23,9 @@ android {
         versionName versionNameApp
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+        buildConfigField "String", "BASE_URL", "\"${getPropertyWithFallback("MOVIES_TMDB_BASE_URL")}\""
+        buildConfigField "String", "API_KEY", "\"${getPropertyWithFallback("MOVIES_TMDB_API_KEY")}\""
+        buildConfigField "int", "LIST_ITEM_OFFSET", "${getPropertyWithFallback("MOVIES_LIST_ITEM_OFFSET")}"
     }
 
     buildTypes {
@@ -44,11 +56,13 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
     implementation "androidx.appcompat:appcompat:${jetpackAppCompatVersion}"
     implementation "androidx.constraintlayout:constraintlayout:${constraintLayoutVersion}"
-    implementation "androidx.recyclerview:recyclerview:${androidJetpackVersion}"
+    implementation "androidx.recyclerview:recyclerview:${jetpackAppCompatVersion}"
     implementation "com.google.android.material:material:${androidJetpackVersion}"
     implementation "androidx.legacy:legacy-support-v4:${androidJetpackVersion}"
     implementation "androidx.core:core-ktx:${jetpackAppCompatVersion}"
     implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
+    implementation "io.reactivex.rxjava2:rxjava:${rxJavaVersion}"
+    implementation "io.reactivex.rxjava2:rxandroid:${rxJavaAndroidVersion}"
 
     testImplementation "androidx.test:core:${androidTestCoreVersion}"
     testImplementation "androidx.test:runner:${supportTestRunnerVersion}"
