@@ -12,7 +12,7 @@ import io.mockk.mockk
 import io.mockk.verifyOrder
 import org.junit.Test
 
-class MoviesStateMachineTest {
+class MoviesMainUseCasesTest {
     @Test
     fun `Given movies gateway returns a list of movies When start is called Then emit loaded state And the list of movies`() {
 
@@ -30,7 +30,12 @@ class MoviesStateMachineTest {
         verifyOrder {
             listenerMock.onStateChanged(State(State.Name.IDLE))
             listenerMock.onStateChanged(State(State.Name.LOADING))
-            listenerMock.onStateChanged(State(State.Name.LOADED, Movies(popularMoviesList)))
+            listenerMock.onStateChanged(
+                State(
+                    State.Name.LOADED,
+                    Movies(popularMoviesList, Movies.Category.POPULAR)
+                )
+            )
         }
     }
 
@@ -47,12 +52,27 @@ class MoviesStateMachineTest {
         val listenerMock = mockk<StateListener<Movies, MoviesGatewayError>>(relaxed = true)
         moviesStateMachine.addStateChangedListener(listenerMock)
         moviesStateMachine.start()
-        moviesStateMachine.loadPopularMovies()
+        moviesStateMachine.loadMovies()
 
         verifyOrder {
-            listenerMock.onStateChanged(State(State.Name.LOADED, Movies(popularMoviesList)))
-            listenerMock.onStateChanged(State(State.Name.LOADING, Movies(popularMoviesList)))
-            listenerMock.onStateChanged(State(State.Name.LOADED, Movies(popularMoviesList)))
+            listenerMock.onStateChanged(
+                State(
+                    State.Name.LOADED,
+                    Movies(popularMoviesList, Movies.Category.POPULAR)
+                )
+            )
+            listenerMock.onStateChanged(
+                State(
+                    State.Name.LOADING,
+                    Movies(popularMoviesList, Movies.Category.POPULAR)
+                )
+            )
+            listenerMock.onStateChanged(
+                State(
+                    State.Name.LOADED,
+                    Movies(popularMoviesList, Movies.Category.POPULAR)
+                )
+            )
         }
     }
 
@@ -70,12 +90,27 @@ class MoviesStateMachineTest {
         val listenerMock = mockk<StateListener<Movies, MoviesGatewayError>>(relaxed = true)
         moviesStateMachine.addStateChangedListener(listenerMock)
         moviesStateMachine.start()
-        moviesStateMachine.loadTopRatedMovies()
+        moviesStateMachine.loadMovies(Movies.Category.TOP_RATED)
 
         verifyOrder {
-            listenerMock.onStateChanged(State(State.Name.LOADED, Movies(popularMoviesList)))
-            listenerMock.onStateChanged(State(State.Name.LOADING, Movies(popularMoviesList)))
-            listenerMock.onStateChanged(State(State.Name.LOADED, Movies(topRatedMoviesList)))
+            listenerMock.onStateChanged(
+                State(
+                    State.Name.LOADED,
+                    Movies(popularMoviesList, Movies.Category.POPULAR)
+                )
+            )
+            listenerMock.onStateChanged(
+                State(
+                    State.Name.LOADING,
+                    Movies(popularMoviesList, Movies.Category.POPULAR)
+                )
+            )
+            listenerMock.onStateChanged(
+                State(
+                    State.Name.LOADED,
+                    Movies(topRatedMoviesList, Movies.Category.TOP_RATED)
+                )
+            )
         }
     }
 
@@ -93,13 +128,28 @@ class MoviesStateMachineTest {
 
         val listenerMock = mockk<StateListener<Movies, MoviesGatewayError>>(relaxed = true)
         moviesStateMachine.addStateChangedListener(listenerMock)
-        moviesStateMachine.loadPopularMovies()
-        moviesStateMachine.loadMorePopularMovies()
+        moviesStateMachine.loadMovies()
+        moviesStateMachine.loadMoreMovies()
 
         verifyOrder {
-            listenerMock.onStateChanged(State(State.Name.LOADED, Movies(popularMoviesList)))
-            listenerMock.onStateChanged(State(State.Name.LOADING, Movies(popularMoviesList)))
-            listenerMock.onStateChanged(State(State.Name.LOADED, Movies(allMoviesList)))
+            listenerMock.onStateChanged(
+                State(
+                    State.Name.LOADED,
+                    Movies(popularMoviesList, Movies.Category.POPULAR)
+                )
+            )
+            listenerMock.onStateChanged(
+                State(
+                    State.Name.LOADING,
+                    Movies(popularMoviesList, Movies.Category.POPULAR)
+                )
+            )
+            listenerMock.onStateChanged(
+                State(
+                    State.Name.LOADED,
+                    Movies(allMoviesList, Movies.Category.POPULAR)
+                )
+            )
         }
     }
 
@@ -117,13 +167,28 @@ class MoviesStateMachineTest {
 
         val listenerMock = mockk<StateListener<Movies, MoviesGatewayError>>(relaxed = true)
         moviesStateMachine.addStateChangedListener(listenerMock)
-        moviesStateMachine.loadTopRatedMovies()
-        moviesStateMachine.loadMoreTopRatedMovies()
+        moviesStateMachine.loadMovies(Movies.Category.TOP_RATED)
+        moviesStateMachine.loadMoreMovies()
 
         verifyOrder {
-            listenerMock.onStateChanged(State(State.Name.LOADED, Movies(topRatedMoviesList)))
-            listenerMock.onStateChanged(State(State.Name.LOADING, Movies(topRatedMoviesList)))
-            listenerMock.onStateChanged(State(State.Name.LOADED, Movies(allMoviesList)))
+            listenerMock.onStateChanged(
+                State(
+                    State.Name.LOADED,
+                    Movies(topRatedMoviesList, Movies.Category.TOP_RATED)
+                )
+            )
+            listenerMock.onStateChanged(
+                State(
+                    State.Name.LOADING,
+                    Movies(topRatedMoviesList, Movies.Category.TOP_RATED)
+                )
+            )
+            listenerMock.onStateChanged(
+                State(
+                    State.Name.LOADED,
+                    Movies(allMoviesList, Movies.Category.TOP_RATED)
+                )
+            )
         }
     }
 }

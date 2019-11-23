@@ -1,6 +1,7 @@
 package com.marcio.popularmoviesclean.movies.presentation
 
 import androidx.annotation.DrawableRes
+import com.marcio.popularmoviesclean.movies.MoviesMainUseCases
 import com.marcio.popularmoviesclean.movies.gateway.MoviesGatewayError
 import com.marcio.popularmoviesclean.movies.models.Movies
 import com.marcio.popularmoviesclean.state.Dispatcher
@@ -9,8 +10,10 @@ import com.marcio.popularmoviesclean.state.State
 import com.marcio.popularmoviesclean.state.StateListener
 
 class MoviesMainPresenter(
+    private val moviesMainUseCases: MoviesMainUseCases,
     private val mainDispatcher: Dispatcher,
-    @DrawableRes private val imagePlaceHolderResource: Int
+    @DrawableRes private val imagePlaceHolderResource: Int,
+    private val listItemOffset: Int
 ) : Presenter<MoviesMainView>(), StateListener<Movies, MoviesGatewayError> {
 
     private var currentState: State<Movies, MoviesGatewayError>? = null
@@ -55,6 +58,15 @@ class MoviesMainPresenter(
                         view?.showUnknownError()
                     }
                 }
+            }
+        }
+    }
+
+    fun onListScroll(canScrollDown: Boolean, itemCount: Int, lastVisibleItemPosition: Int) {
+        if (canScrollDown) {
+            val lastItemPosition = itemCount - 1
+            if ((lastItemPosition - lastVisibleItemPosition) <= listItemOffset) {
+                moviesMainUseCases.loadMoreMovies()
             }
         }
     }

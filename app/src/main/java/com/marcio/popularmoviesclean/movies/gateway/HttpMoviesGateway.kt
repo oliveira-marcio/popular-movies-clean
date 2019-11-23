@@ -1,6 +1,7 @@
 package com.marcio.popularmoviesclean.movies.gateway
 
 import com.marcio.popularmoviesclean.movies.models.Movie
+import com.marcio.popularmoviesclean.movies.models.Movies
 import okhttp3.OkHttpClient
 import okhttp3.Request
 
@@ -11,13 +12,18 @@ class HttpMoviesGateway(
     private val httpClient: OkHttpClient,
     private val gatewayParser: MoviesGatewayParser
 ) : MoviesGateway {
-    override fun getPopularMovies(page: Int) = getMovies("popular", page)
 
-    override fun getTopRatedMovies(page: Int) = getMovies("top_rated", page)
+    private val pathMap = mapOf(
+        Movies.Category.POPULAR to "popular",
+        Movies.Category.TOP_RATED to "top_rated"
+    )
 
-    private fun getMovies(path: String, page: Int): List<Movie> {
+    override fun getMovies(
+        category: Movies.Category,
+        page: Int
+    ): List<Movie> {
         val request = Request.Builder()
-            .url("${baseUrl}$path/movies?api_key=$apiKey&language=$locale&page=$page")
+            .url("${baseUrl}${pathMap.getValue(category)}/movies?api_key=$apiKey&language=$locale&page=$page")
             .get()
             .build()
 

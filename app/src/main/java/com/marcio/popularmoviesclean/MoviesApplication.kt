@@ -17,8 +17,10 @@ class MoviesApplication private constructor(
 
     override val moviesMainPresenter by lazy {
         val presenter = MoviesMainPresenter(
+            moviesStateMachine,
             lazyDispatcherFactory.value.createMainDispatcher(),
-            -1 // TODO: Should be a real resource
+            -1, // TODO: Should be a real resource
+            5 // TODO: Should define correct value
         )
         moviesStateMachine.addStateChangedListener(presenter)
         presenter

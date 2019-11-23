@@ -2,6 +2,7 @@ package com.marcio.popularmoviesclean.movies.gateway
 
 import com.marcio.popularmoviesclean.TestData
 import com.marcio.popularmoviesclean.gateway.FakeMoviesGatewayJsonParser
+import com.marcio.popularmoviesclean.movies.models.Movies
 import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -9,7 +10,7 @@ import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class HttpMoviesGatewayTest {
+class HttpMoviesGatewayIntegrationTest {
     @Test
     fun `Given there is internet connection When get popular movies is called Then TMDB API with popular path is called with GET method`() {
         val server = MockWebServer()
@@ -27,7 +28,7 @@ class HttpMoviesGatewayTest {
             FakeMoviesGatewayJsonParser(moviesList)
         )
 
-        assertEquals(moviesList, service.getPopularMovies())
+        assertEquals(moviesList, service.getMovies())
 
         val request = server.takeRequest()
 
@@ -54,7 +55,7 @@ class HttpMoviesGatewayTest {
             FakeMoviesGatewayJsonParser(moviesList)
         )
 
-        assertEquals(moviesList, service.getTopRatedMovies())
+        assertEquals(moviesList, service.getMovies(Movies.Category.TOP_RATED))
 
         val request = server.takeRequest()
 
@@ -81,7 +82,7 @@ class HttpMoviesGatewayTest {
         )
 
         try {
-            service.getPopularMovies()
+            service.getMovies()
             Assert.fail("Should throw an illegal state exception")
         } catch (_: IllegalStateException) {
         }
@@ -106,7 +107,7 @@ class HttpMoviesGatewayTest {
             FakeMoviesGatewayJsonParser(moviesList)
         )
 
-        assertEquals(moviesList, service.getPopularMovies(2))
+        assertEquals(moviesList, service.getMovies(page = 2))
 
         val request = server.takeRequest()
 
@@ -133,7 +134,7 @@ class HttpMoviesGatewayTest {
             FakeMoviesGatewayJsonParser(moviesList)
         )
 
-        assertEquals(moviesList, service.getTopRatedMovies(2))
+        assertEquals(moviesList, service.getMovies(Movies.Category.TOP_RATED, 2))
 
         val request = server.takeRequest()
 

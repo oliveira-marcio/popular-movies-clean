@@ -1,9 +1,11 @@
-package com.marcio.popularmoviesclean.movies.presentation
+package com.marcio.popularmoviesclean.movies
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.Visibility
+import androidx.test.espresso.matcher.ViewMatchers.hasChildCount
+import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
@@ -16,10 +18,12 @@ import com.marcio.popularmoviesclean.TestApplication
 import com.marcio.popularmoviesclean.TestData
 import com.marcio.popularmoviesclean.movies.gateway.HttpMoviesGateway
 import com.marcio.popularmoviesclean.movies.gateway.MoviesGatewayJsonParser
+import com.marcio.popularmoviesclean.movies.presentation.MoviesMainFragment
 import com.marcio.popularmoviesclean.state.FakeDispatcherFactory
 import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
+import org.hamcrest.Matchers.allOf
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -232,6 +236,61 @@ class MoviesMainComponentTest {
         onView(withId(R.id.errorView)).check(matches(withEffectiveVisibility(Visibility.GONE)))
         onView(withText("The Shawshank Redemption")).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
         onView(withText("Whiplash")).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+
+        server.shutdown()
+    }
+
+    @Test
+    fun `Given loaded movies When list is scrolled to the end Then should load more movies`() {
+        val firstMoviesJson = TestData.JSON_POPULAR_MOVIES_RESPONSE.trimIndent()
+        val secondMoviesJson = TestData.JSON_TOP_RATED_MOVIES_RESPONSE.trimIndent()
+        val server = MockWebServer()
+        server.start()
+        server.enqueue(MockResponse().setResponseCode(200).setBody(firstMoviesJson))
+        server.enqueue(MockResponse().setResponseCode(200).setBody(secondMoviesJson))
+
+        val baseUrl = server.url("/").toString()
+        rule.activity.testDependencyManager = MoviesApplication.Builder()
+            .registerMoviesGateway(lazy {
+                HttpMoviesGateway(
+                    baseUrl,
+                    "123",
+                    httpClient = OkHttpClient(),
+                    gatewayParser = MoviesGatewayJsonParser()
+                )
+            })
+            .registerDispatcherFactory(lazy { FakeDispatcherFactory() })
+            .start()
+
+        rule.activity.showFragment(MoviesMainFragment())
+
+        onView(withId(R.id.moviesList)).check(
+            matches(
+                allOf(
+                    hasChildCount(2),
+                    hasDescendant(withText("Suicide Squad")),
+                    hasDescendant(withText("Jason Bourne"))
+                )
+            )
+        )
+
+        (rule.activity.testDependencyManager as MoviesApplication).moviesMainPresenter.onListScroll(
+            true,
+            2,
+            1
+        )
+
+        onView(withId(R.id.moviesList)).check(
+            matches(
+                allOf(
+                    hasChildCount(4),
+                    hasDescendant(withText("Suicide Squad")),
+                    hasDescendant(withText("Jason Bourne")),
+                    hasDescendant(withText("The Shawshank Redemption")),
+                    hasDescendant(withText("Whiplash"))
+                )
+            )
+        )
 
         server.shutdown()
     }

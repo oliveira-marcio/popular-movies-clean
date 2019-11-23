@@ -2,13 +2,18 @@ package com.marcio.popularmoviesclean.gateway
 
 import com.marcio.popularmoviesclean.movies.gateway.MoviesGateway
 import com.marcio.popularmoviesclean.movies.models.Movie
+import com.marcio.popularmoviesclean.movies.models.Movies
 
 class FakeMoviesGateway(
-    private val popularMovies: List<Movie> = emptyList(),
-    private val topRatedMovies: List<Movie> = emptyList()
+    popularMovies: List<Movie> = emptyList(),
+    topRatedMovies: List<Movie> = emptyList()
 ) : MoviesGateway {
 
-    override fun getPopularMovies(page: Int) = if (page == 1) popularMovies else topRatedMovies
+    private val moviesMap = mapOf(
+        Movies.Category.POPULAR to listOf(popularMovies, topRatedMovies),
+        Movies.Category.TOP_RATED to listOf(topRatedMovies, popularMovies)
+    )
 
-    override fun getTopRatedMovies(page: Int) = if (page == 1) topRatedMovies else popularMovies
+    override fun getMovies(category: Movies.Category, page: Int) =
+        moviesMap.getValue(category)[page - 1]
 }

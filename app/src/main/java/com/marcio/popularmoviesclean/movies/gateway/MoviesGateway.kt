@@ -1,8 +1,11 @@
 package com.marcio.popularmoviesclean.movies.gateway
 
 import com.marcio.popularmoviesclean.movies.models.Movie
+import com.marcio.popularmoviesclean.movies.models.Movies
 
 interface MoviesGateway {
-    fun getPopularMovies(page: Int = 1): List<Movie>
-    fun getTopRatedMovies(page: Int = 1): List<Movie>
+    fun getMovies(
+        category: Movies.Category = Movies.Category.POPULAR,
+        page: Int = 1
+    ): List<Movie>
 }

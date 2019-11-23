@@ -2,7 +2,6 @@ package com.marcio.popularmoviesclean.movies
 
 import com.marcio.popularmoviesclean.movies.gateway.MoviesGateway
 import com.marcio.popularmoviesclean.movies.gateway.MoviesGatewayError
-import com.marcio.popularmoviesclean.movies.models.Movie
 import com.marcio.popularmoviesclean.movies.models.Movies
 import com.marcio.popularmoviesclean.state.Dispatcher
 import com.marcio.popularmoviesclean.state.ErrorFactory
@@ -17,45 +16,21 @@ class MoviesStateMachine(
     private var currentPage = 1
 
     override fun start() {
-        loadPopularMovies()
+        loadMovies()
     }
 
-    override fun loadPopularMovies() {
-        loadMovies {
-            moviesGateway.getPopularMovies()
-        }
-    }
-
-    override fun loadTopRatedMovies() {
-        loadMovies {
-            moviesGateway.getTopRatedMovies()
-        }
-    }
-
-    override fun loadMorePopularMovies() {
-        loadMoreMovies {
-            moviesGateway.getPopularMovies(++currentPage)
-        }
-    }
-
-    override fun loadMoreTopRatedMovies() {
-        loadMoreMovies {
-            moviesGateway.getTopRatedMovies(++currentPage)
-        }
-    }
-
-    private fun loadMovies(gateway: () -> List<Movie>) {
+    override fun loadMovies(category: Movies.Category) {
         loadNewState {
             currentPage = 1
-            Movies(gateway.invoke())
+            Movies(moviesGateway.getMovies(category), category)
         }
     }
 
-    private fun loadMoreMovies(gateway: () -> List<Movie>) {
+    override fun loadMoreMovies() {
         loadNewState {
             val movies = currentState.value!!
             if (movies.list.isNotEmpty()) {
-                val nextMovies = gateway.invoke()
+                val nextMovies = moviesGateway.getMovies(movies.selectedCategory, ++currentPage)
                 val moviesList = movies.list.toMutableList()
                 moviesList.addAll(nextMovies)
                 movies.copy(list = moviesList)

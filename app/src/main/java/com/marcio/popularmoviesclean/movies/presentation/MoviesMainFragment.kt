@@ -10,9 +10,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.marcio.popularmoviesclean.DependencyManager
 import com.marcio.popularmoviesclean.R
 import com.marcio.popularmoviesclean.android.ViewContainer
+import com.marcio.popularmoviesclean.movies.models.Movies
 import kotlinx.android.synthetic.main.fragment_movies_main.errorView
 import kotlinx.android.synthetic.main.fragment_movies_main.loadingBar
 import kotlinx.android.synthetic.main.fragment_movies_main.moviesList
@@ -27,6 +29,7 @@ class MoviesMainFragment : Fragment(), MoviesMainView {
 
     private var adapter: MoviesListAdapter? = null
     private var layoutManager: LinearLayoutManager? = null
+    private var scrollListener: RecyclerView.OnScrollListener? = null
 
     private val moviesMainUseCases by lazy {
         dependencyManager!!.moviesMainUseCases
@@ -46,6 +49,20 @@ class MoviesMainFragment : Fragment(), MoviesMainView {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         dependencyManager = (context as ViewContainer).dependencyManager
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        scrollListener = object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                moviesMainPresenter.onListScroll(
+                    recyclerView.canScrollVertically(1),
+                    adapter!!.itemCount,
+                    layoutManager!!.findLastVisibleItemPosition()
+                )
+            }
+        }
     }
 
     override fun onCreateView(
@@ -77,17 +94,25 @@ class MoviesMainFragment : Fragment(), MoviesMainView {
     override fun onResume() {
         super.onResume()
         moviesMainPresenter.attachView(this)
+        moviesList.addOnScrollListener(scrollListener!!)
     }
 
     override fun onPause() {
         moviesMainPresenter.detachView()
+        moviesList.removeOnScrollListener(scrollListener!!)
         super.onPause()
     }
 
     override fun onDestroyView() {
         adapter = null
         layoutManager = null
+        moviesList.removeOnScrollListener(scrollListener!!)
         super.onDestroyView()
+    }
+
+    override fun onDestroy() {
+        scrollListener = null
+        super.onDestroy()
     }
 
     override fun onDetach() {
@@ -104,20 +129,20 @@ class MoviesMainFragment : Fragment(), MoviesMainView {
         when (item.itemId) {
             R.id.actionRefresh -> {
                 if (loadPopularMovies) {
-                    moviesMainUseCases.loadPopularMovies()
+                    moviesMainUseCases.loadMovies()
                 } else {
-                    moviesMainUseCases.loadTopRatedMovies()
+                    moviesMainUseCases.loadMovies(Movies.Category.TOP_RATED)
                 }
                 return true
             }
             R.id.actionPopular -> {
                 loadPopularMovies = true
-                moviesMainUseCases.loadPopularMovies()
+                moviesMainUseCases.loadMovies()
                 return true
             }
             R.id.actionTopRated -> {
                 loadPopularMovies = false
-                moviesMainUseCases.loadTopRatedMovies()
+                moviesMainUseCases.loadMovies(Movies.Category.TOP_RATED)
                 return true
             }
         }
@@ -126,7 +151,9 @@ class MoviesMainFragment : Fragment(), MoviesMainView {
 
     override fun showMovies(listViewModel: MoviesListViewModel) {
         moviesList.visibility = View.VISIBLE
+        val viewsState = layoutManager!!.onSaveInstanceState()
         adapter!!.setMovies(listViewModel.list)
+        layoutManager!!.onRestoreInstanceState(viewsState)
     }
 
     override fun hideMovies() {
