@@ -8,6 +8,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,7 +17,8 @@ import com.marcio.popularmoviesclean.R
 import com.marcio.popularmoviesclean.android.ViewContainer
 import com.marcio.popularmoviesclean.movies.models.Movies
 import kotlinx.android.synthetic.main.fragment_movies_main.errorView
-import kotlinx.android.synthetic.main.fragment_movies_main.loadingBar
+import kotlinx.android.synthetic.main.fragment_movies_main.listLoading
+import kotlinx.android.synthetic.main.fragment_movies_main.mainLoading
 import kotlinx.android.synthetic.main.fragment_movies_main.moviesList
 
 class MoviesMainFragment : Fragment(), MoviesMainView {
@@ -26,6 +28,7 @@ class MoviesMainFragment : Fragment(), MoviesMainView {
     private var adapter: MoviesListAdapter? = null
     private var layoutManager: LinearLayoutManager? = null
     private var scrollListener: RecyclerView.OnScrollListener? = null
+    private var toast: Toast? = null
 
     private val moviesMainUseCases by lazy {
         dependencyManager!!.moviesMainUseCases
@@ -45,11 +48,13 @@ class MoviesMainFragment : Fragment(), MoviesMainView {
         scrollListener = object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                moviesMainPresenter.onListScroll(
-                    recyclerView.canScrollVertically(1),
-                    adapter!!.itemCount,
-                    layoutManager!!.findLastVisibleItemPosition()
-                )
+                if (dy > 0) {
+                    moviesMainPresenter.onListScroll(
+                        recyclerView.canScrollVertically(1),
+                        adapter!!.itemCount,
+                        layoutManager!!.findLastVisibleItemPosition()
+                    )
+                }
             }
         }
     }
@@ -142,12 +147,20 @@ class MoviesMainFragment : Fragment(), MoviesMainView {
         moviesList.visibility = View.GONE
     }
 
-    override fun showLoading() {
-        loadingBar.visibility = View.VISIBLE
+    override fun showMainLoading() {
+        mainLoading.visibility = View.VISIBLE
     }
 
-    override fun hideLoading() {
-        loadingBar.visibility = View.GONE
+    override fun hideMainLoading() {
+        mainLoading.visibility = View.GONE
+    }
+
+    override fun showListLoading() {
+        listLoading.visibility = View.VISIBLE
+    }
+
+    override fun hideListLoading() {
+        listLoading.visibility = View.GONE
     }
 
     override fun showNetworkError() {
@@ -162,5 +175,19 @@ class MoviesMainFragment : Fragment(), MoviesMainView {
 
     override fun hideError() {
         errorView.visibility = View.GONE
+    }
+
+    override fun showNetworkWarning() {
+        showToast(getString(R.string.error_internet))
+    }
+
+    override fun showUnknownWarning() {
+        showToast(getString(R.string.error_unknown))
+    }
+
+    private fun showToast(message: String) {
+        toast?.cancel()
+        toast = Toast.makeText(context, message, Toast.LENGTH_SHORT)
+        toast?.show()
     }
 }

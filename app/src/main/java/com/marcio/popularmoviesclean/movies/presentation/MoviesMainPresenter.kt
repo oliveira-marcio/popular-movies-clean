@@ -27,22 +27,23 @@ class MoviesMainPresenter(
             return
         }
 
-// TODO:
-//  - Add loading progress bar to bottom of list on loading more (replacing main loading)
-//  - If there's already movies loaded, don't hide list on error (show a Toast, for example)
-
         mainDispatcher.dispatch {
             when (currentState!!.name) {
                 State.Name.IDLE, State.Name.LOADING -> {
+                    view?.hideError()
                     if (currentState!!.value == null) {
                         view?.hideMovies()
+                        view?.hideListLoading()
+                        view?.showMainLoading()
+                    } else {
+                        view?.hideMainLoading()
+                        view?.showListLoading()
                     }
-                    view?.hideError()
-                    view?.showLoading()
                 }
 
                 State.Name.LOADED -> {
-                    view?.hideLoading()
+                    view?.hideMainLoading()
+                    view?.hideListLoading()
                     view?.hideError()
                     view?.showMovies(
                         MoviesListViewModel(
@@ -53,12 +54,28 @@ class MoviesMainPresenter(
                 }
 
                 State.Name.ERROR -> {
-                    view?.hideLoading()
-                    view?.hideMovies()
-                    if (currentState!!.error!!.isNetwork) {
-                        view?.showNetworkError()
+                    val movies = currentState!!.value
+                    view?.hideMainLoading()
+                    view?.hideListLoading()
+                    if (movies == null) {
+                        view?.hideMovies()
+                        if (currentState!!.error!!.isNetwork) {
+                            view?.showNetworkError()
+                        } else {
+                            view?.showUnknownError()
+                        }
                     } else {
-                        view?.showUnknownError()
+                        view?.showMovies(
+                            MoviesListViewModel(
+                                movies,
+                                placeHolder!!
+                            )
+                        )
+                        if (currentState!!.error!!.isNetwork) {
+                            view?.showNetworkWarning()
+                        } else {
+                            view?.showUnknownWarning()
+                        }
                     }
                 }
             }
