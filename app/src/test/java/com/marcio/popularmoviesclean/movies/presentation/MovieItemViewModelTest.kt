@@ -8,7 +8,7 @@ class MovieItemViewModelTest {
     @Test
     fun `Given a movie title When content description is requested Then return title`() {
         val viewModel = MovieItemViewModel(
-            Movie("Star Wars"),
+            Movie(title = "Star Wars"),
             MovieItemPlaceHolder("N/A")
         )
         assertEquals("Star Wars", viewModel.contentDescription)
@@ -26,7 +26,7 @@ class MovieItemViewModelTest {
     @Test
     fun `Given a space only title When content description is requested Then return replacement text`() {
         val viewModel = MovieItemViewModel(
-            Movie("    "),
+            Movie(title = "    "),
             MovieItemPlaceHolder("N/A")
         )
         assertEquals("N/A", viewModel.contentDescription)

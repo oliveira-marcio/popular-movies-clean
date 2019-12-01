@@ -48,4 +48,10 @@ class MoviesStateMachine(
             }
         }
     }
+
+    override fun selectMovie(id: Int) {
+        loadNewState {
+            currentState.value!!.copy(selectedMovieId = id)
+        }
+    }
 }

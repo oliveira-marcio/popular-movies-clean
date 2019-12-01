@@ -25,6 +25,7 @@ class MoviesGatewayJsonParser : MoviesGatewayParser {
 
             moviesList.add(
                 Movie(
+                    movieObject.optInt("id"),
                     movieObject.optString("title"),
                     posterUrl,
                     movieObject.optString("overview"),

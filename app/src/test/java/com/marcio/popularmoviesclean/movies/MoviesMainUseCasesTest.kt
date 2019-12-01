@@ -9,6 +9,7 @@ import com.marcio.popularmoviesclean.state.FakeDispatcher
 import com.marcio.popularmoviesclean.state.State
 import com.marcio.popularmoviesclean.state.StateListener
 import io.mockk.mockk
+import io.mockk.verify
 import io.mockk.verifyOrder
 import org.junit.Test
 
@@ -315,6 +316,30 @@ class MoviesMainUseCasesTest {
                 State(
                     State.Name.LOADED,
                     Movies(emptyList(), Movies.Category.POPULAR)
+                )
+            )
+        }
+    }
+
+    @Test
+    fun `Given loaded list of movies When select movie is called with id Then emit the movie with id as selected`() {
+        val popularMoviesList = TestData.POPULAR_MOVIES
+        val moviesStateMachine = MoviesStateMachine(
+            FakeMoviesGateway(popularMoviesList),
+            FakeDispatcher(),
+            FakeMoviesGatewayErrorFactory()
+        )
+
+        val listenerMock = mockk<StateListener<Movies, MoviesGatewayError>>(relaxed = true)
+        moviesStateMachine.addStateChangedListener(listenerMock)
+        moviesStateMachine.loadMovies()
+        moviesStateMachine.selectMovie(297761)
+
+        verify {
+            listenerMock.onStateChanged(
+                State(
+                    State.Name.LOADED,
+                    Movies(popularMoviesList, Movies.Category.POPULAR, 297761)
                 )
             )
         }
