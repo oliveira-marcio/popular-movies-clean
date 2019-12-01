@@ -4,7 +4,8 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.marcio.popularmoviesclean.DependencyManager
 import com.marcio.popularmoviesclean.R
-import com.marcio.popularmoviesclean.movies.presentation.MoviesMainFragment
+import com.marcio.popularmoviesclean.navigation.MoviesNavigator
+import com.marcio.popularmoviesclean.navigation.Navigator
 
 class MainActivity : AppCompatActivity(), ViewContainer {
 
@@ -12,17 +13,16 @@ class MainActivity : AppCompatActivity(), ViewContainer {
         (application as AndroidApplication).dependencyManager
     }
 
+    override val navigator: Navigator by lazy {
+        MoviesNavigator(supportFragmentManager)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .replace(
-                    R.id.activity_container,
-                    MoviesMainFragment()
-                )
-                .commit()
+            navigator.navigateToMainView()
         }
     }
 }
