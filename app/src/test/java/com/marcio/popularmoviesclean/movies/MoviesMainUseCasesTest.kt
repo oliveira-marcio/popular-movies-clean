@@ -1,8 +1,8 @@
 package com.marcio.popularmoviesclean.movies
 
 import com.marcio.popularmoviesclean.TestData
-import com.marcio.popularmoviesclean.gateway.FakeMoviesGateway
-import com.marcio.popularmoviesclean.gateway.FakeMoviesGatewayErrorFactory
+import com.marcio.popularmoviesclean.movies.gateway.FakeMoviesGateway
+import com.marcio.popularmoviesclean.movies.gateway.FakeMoviesGatewayErrorFactory
 import com.marcio.popularmoviesclean.movies.gateway.MoviesGatewayError
 import com.marcio.popularmoviesclean.movies.models.Movies
 import com.marcio.popularmoviesclean.state.FakeDispatcher

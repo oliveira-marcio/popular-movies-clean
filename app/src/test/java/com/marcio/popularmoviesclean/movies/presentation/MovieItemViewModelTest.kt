@@ -6,29 +6,29 @@ import org.junit.Test
 
 class MovieItemViewModelTest {
     @Test
-    fun `Given a movie title When title is requested Then return title`() {
+    fun `Given a movie title When content description is requested Then return title`() {
         val viewModel = MovieItemViewModel(
             Movie("Star Wars"),
-            MovieItemPlaceHolder("N/A", -1)
+            MovieItemPlaceHolder("N/A")
         )
-        assertEquals("Star Wars", viewModel.title)
+        assertEquals("Star Wars", viewModel.contentDescription)
     }
 
     @Test
-    fun `Given an empty movie title When title is requested Then return replacement text`() {
+    fun `Given an empty movie title When content description is requested Then return replacement text`() {
         val viewModel = MovieItemViewModel(
             Movie(),
-            MovieItemPlaceHolder("N/A", -1)
+            MovieItemPlaceHolder("N/A")
         )
-        assertEquals("N/A", viewModel.title)
+        assertEquals("N/A", viewModel.contentDescription)
     }
 
     @Test
-    fun `Given a space only title When title is requested Then return replacement text`() {
+    fun `Given a space only title When content description is requested Then return replacement text`() {
         val viewModel = MovieItemViewModel(
             Movie("    "),
-            MovieItemPlaceHolder("N/A", -1)
+            MovieItemPlaceHolder("N/A")
         )
-        assertEquals("N/A", viewModel.title)
+        assertEquals("N/A", viewModel.contentDescription)
     }
 }

@@ -8,9 +8,10 @@
     android:orientation="vertical">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/moviesList"
+        android:id="@+id/moviesGrid"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:padding="@dimen/poster_grid_margin"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/listLoading"
         app:layout_constraintEnd_toEndOf="parent"
@@ -18,7 +19,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
-        tools:listitem="@layout/movies_list_item"
+        tools:listitem="@layout/movies_grid_item"
         tools:visibility="visible" />
 
     <ProgressBar
@@ -42,7 +43,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/moviesList"
+        app:layout_constraintTop_toBottomOf="@+id/moviesGrid"
         tools:visibility="visible" />
 
     <TextView

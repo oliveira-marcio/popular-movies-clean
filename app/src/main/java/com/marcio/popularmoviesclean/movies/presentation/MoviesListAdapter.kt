@@ -7,16 +7,20 @@ import com.marcio.popularmoviesclean.R
 
 class MoviesListAdapter(
     private val inflater: LayoutInflater,
+    private val imageLoader: ImageLoader,
+    private val imageLoaderReference: String,
     private val items: MutableList<MovieItemViewModel> = mutableListOf()
 ) : RecyclerView.Adapter<MoviesListViewHolder>() {
 
-    override fun getItemViewType(position: Int) = R.layout.movies_list_item
+    override fun getItemViewType(position: Int) = R.layout.movies_grid_item
 
     override fun getItemCount() = items.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesListViewHolder {
         return MoviesListViewHolder(
-            inflater.inflate(viewType, parent, false)
+            inflater.inflate(viewType, parent, false),
+            imageLoader,
+            imageLoaderReference
         )
     }
 

@@ -2,6 +2,8 @@ package com.marcio.popularmoviesclean.movies.presentation
 
 import android.content.Context
 import android.os.Bundle
+import android.util.DisplayMetrics
+import android.view.Display
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -10,18 +12,24 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.marcio.popularmoviesclean.DependencyManager
 import com.marcio.popularmoviesclean.R
 import com.marcio.popularmoviesclean.android.ViewContainer
 import com.marcio.popularmoviesclean.movies.models.Movies
+import kotlin.math.roundToInt
 import kotlinx.android.synthetic.main.fragment_movies_main.errorView
 import kotlinx.android.synthetic.main.fragment_movies_main.listLoading
 import kotlinx.android.synthetic.main.fragment_movies_main.mainLoading
-import kotlinx.android.synthetic.main.fragment_movies_main.moviesList
+import kotlinx.android.synthetic.main.fragment_movies_main.moviesGrid
 
 class MoviesMainFragment : Fragment(), MoviesMainView {
+
+    companion object {
+        const val IMAGE_LOADER_REFERENCE = "MoviesMainFragment"
+    }
 
     private var dependencyManager: DependencyManager? = null
 
@@ -29,6 +37,7 @@ class MoviesMainFragment : Fragment(), MoviesMainView {
     private var layoutManager: LinearLayoutManager? = null
     private var scrollListener: RecyclerView.OnScrollListener? = null
     private var toast: Toast? = null
+    private var display: Display? = null
 
     private val moviesMainUseCases by lazy {
         dependencyManager!!.moviesMainUseCases
@@ -36,6 +45,10 @@ class MoviesMainFragment : Fragment(), MoviesMainView {
 
     private val moviesMainPresenter by lazy {
         dependencyManager!!.moviesMainPresenter
+    }
+
+    private val imageLoader by lazy {
+        dependencyManager!!.imageLoader
     }
 
     override fun onAttach(context: Context) {
@@ -70,12 +83,19 @@ class MoviesMainFragment : Fragment(), MoviesMainView {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        display = activity!!.windowManager.defaultDisplay
+        val spanCount =
+            calculateBestSpanCount(display!!, resources.getInteger(R.integer.thumb_size))
+        layoutManager = GridLayoutManager(context, spanCount)
+        moviesGrid.layoutManager = layoutManager
+
         adapter = MoviesListAdapter(
-            LayoutInflater.from(context)
+            LayoutInflater.from(context),
+            imageLoader,
+            IMAGE_LOADER_REFERENCE
         )
-        layoutManager = LinearLayoutManager(context)
-        moviesList.layoutManager = layoutManager
-        moviesList.adapter = adapter
+        moviesGrid.adapter = adapter
     }
 
     override fun onResume() {
@@ -83,23 +103,25 @@ class MoviesMainFragment : Fragment(), MoviesMainView {
         moviesMainPresenter.attachView(
             this,
             MovieItemPlaceHolder(
-                getString(R.string.movie_title_placeholder),
-                -1 // TODO: Should be a real resource
+                getString(R.string.movie_title_placeholder)
             )
         )
-        moviesList.addOnScrollListener(scrollListener!!)
+        moviesGrid.addOnScrollListener(scrollListener!!)
     }
 
     override fun onPause() {
         moviesMainPresenter.detachView()
-        moviesList.removeOnScrollListener(scrollListener!!)
+        moviesGrid.removeOnScrollListener(scrollListener!!)
         super.onPause()
     }
 
     override fun onDestroyView() {
         adapter = null
         layoutManager = null
-        moviesList.removeOnScrollListener(scrollListener!!)
+        toast = null
+        display = null
+        imageLoader.cancel(IMAGE_LOADER_REFERENCE)
+        moviesGrid.removeOnScrollListener(scrollListener!!)
         super.onDestroyView()
     }
 
@@ -137,14 +159,14 @@ class MoviesMainFragment : Fragment(), MoviesMainView {
     }
 
     override fun showMovies(listViewModel: MoviesListViewModel) {
-        moviesList.visibility = View.VISIBLE
+        moviesGrid.visibility = View.VISIBLE
         val viewsState = layoutManager!!.onSaveInstanceState()
         adapter!!.setMovies(listViewModel.list)
         layoutManager!!.onRestoreInstanceState(viewsState)
     }
 
     override fun hideMovies() {
-        moviesList.visibility = View.GONE
+        moviesGrid.visibility = View.GONE
     }
 
     override fun showMainLoading() {
@@ -189,5 +211,12 @@ class MoviesMainFragment : Fragment(), MoviesMainView {
         toast?.cancel()
         toast = Toast.makeText(context, message, Toast.LENGTH_SHORT)
         toast?.show()
+    }
+
+    private fun calculateBestSpanCount(display: Display, posterWidth: Int): Int {
+        val outMetrics = DisplayMetrics()
+        display.getMetrics(outMetrics)
+        val screenWidth = outMetrics.widthPixels.toFloat()
+        return (screenWidth / posterWidth).roundToInt()
     }
 }

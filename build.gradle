@@ -2,7 +2,7 @@ buildscript {
     ext {
         versionCodeApp = 1
         versionNameApp = '1.0'
-        kotlinVersion = '1.3.50'
+        kotlinVersion = '1.3.61'
         androidPluginVersion = '3.5.2'
         compileAndroidSDkVersion = 29
         targetAndroidSDkVersion = 29
@@ -17,6 +17,7 @@ buildscript {
         jetpackAppCompatVersion = '1.1.0'
         mockkVersion = '1.8.13'
         okHttpVersion = '3.11.0'
+        picassoVersion = '2.71828'
         robolectricVersion = '4.1'
         rxJavaVersion = '2.1.9'
         rxJavaAndroidVersion = '2.1.0'

@@ -3,12 +3,14 @@ package com.marcio.popularmoviesclean
 import com.marcio.popularmoviesclean.movies.MoviesStateMachine
 import com.marcio.popularmoviesclean.movies.gateway.MoviesGateway
 import com.marcio.popularmoviesclean.movies.gateway.MoviesGatewayErrorFactory
+import com.marcio.popularmoviesclean.movies.presentation.ImageLoader
 import com.marcio.popularmoviesclean.movies.presentation.MoviesMainPresenter
 import com.marcio.popularmoviesclean.state.DispatcherFactory
 
 class MoviesApplication private constructor(
     lazyDispatcherFactory: Lazy<DispatcherFactory>,
-    lazyMoviesGateway: Lazy<MoviesGateway>
+    lazyMoviesGateway: Lazy<MoviesGateway>,
+    lazyImageLoader: Lazy<ImageLoader>
 ) : DependencyManager {
 
     override val moviesMainUseCases by lazy {
@@ -23,6 +25,10 @@ class MoviesApplication private constructor(
         )
         moviesStateMachine.addStateChangedListener(presenter)
         presenter
+    }
+
+    override val imageLoader by lazy {
+        lazyImageLoader.value
     }
 
     private val moviesStateMachine: MoviesStateMachine by lazy {
@@ -41,6 +47,7 @@ class MoviesApplication private constructor(
 
         private var lazyDispatcherFactory: Lazy<DispatcherFactory>? = null
         private var lazyMoviesGateway: Lazy<MoviesGateway>? = null
+        private var lazyImageLoader: Lazy<ImageLoader>? = null
 
         fun registerDispatcherFactory(lazyDispatcherFactory: Lazy<DispatcherFactory>): Builder {
             this.lazyDispatcherFactory = lazyDispatcherFactory
@@ -52,9 +59,14 @@ class MoviesApplication private constructor(
             return this
         }
 
+        fun registerImageLoader(lazyImageLoader: Lazy<ImageLoader>): Builder {
+            this.lazyImageLoader = lazyImageLoader
+            return this
+        }
+
         fun start(): MoviesApplication {
             val application =
-                MoviesApplication(lazyDispatcherFactory!!, lazyMoviesGateway!!)
+                MoviesApplication(lazyDispatcherFactory!!, lazyMoviesGateway!!, lazyImageLoader!!)
             application.start()
             return application
         }

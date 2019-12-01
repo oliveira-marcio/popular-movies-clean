@@ -1,6 +1,5 @@
-package com.marcio.popularmoviesclean.gateway
+package com.marcio.popularmoviesclean.movies.gateway
 
-import com.marcio.popularmoviesclean.movies.gateway.MoviesGateway
 import com.marcio.popularmoviesclean.movies.models.Movie
 import com.marcio.popularmoviesclean.movies.models.Movies
 

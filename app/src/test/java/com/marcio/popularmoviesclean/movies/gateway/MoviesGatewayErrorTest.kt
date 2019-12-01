@@ -1,9 +1,9 @@
 package com.marcio.popularmoviesclean.movies.gateway
 
+import java.io.IOException
 import org.json.JSONException
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import java.io.IOException
 
 class MoviesGatewayErrorTest {
     @Test

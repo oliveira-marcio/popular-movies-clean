@@ -1,7 +1,7 @@
 package com.marcio.popularmoviesclean.android
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.marcio.popularmoviesclean.DependencyManager
 import com.marcio.popularmoviesclean.R
 import com.marcio.popularmoviesclean.movies.presentation.MoviesMainFragment

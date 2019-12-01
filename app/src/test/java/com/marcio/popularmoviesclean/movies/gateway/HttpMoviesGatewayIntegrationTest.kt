@@ -1,7 +1,6 @@
 package com.marcio.popularmoviesclean.movies.gateway
 
 import com.marcio.popularmoviesclean.TestData
-import com.marcio.popularmoviesclean.gateway.FakeMoviesGatewayJsonParser
 import com.marcio.popularmoviesclean.movies.models.Movies
 import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockResponse
@@ -22,6 +21,8 @@ class HttpMoviesGatewayIntegrationTest {
 
         val service = HttpMoviesGateway(
             baseUrl,
+            TestData.POSTER_BASE_URL,
+            500,
             "123",
             "pt-BR",
             OkHttpClient(),
@@ -49,6 +50,8 @@ class HttpMoviesGatewayIntegrationTest {
 
         val service = HttpMoviesGateway(
             baseUrl,
+            TestData.POSTER_BASE_URL,
+            500,
             "123",
             "pt-BR",
             OkHttpClient(),
@@ -75,6 +78,8 @@ class HttpMoviesGatewayIntegrationTest {
 
         val service = HttpMoviesGateway(
             baseUrl,
+            TestData.POSTER_BASE_URL,
+            500,
             "123",
             "pt-BR",
             OkHttpClient(),
@@ -101,6 +106,8 @@ class HttpMoviesGatewayIntegrationTest {
 
         val service = HttpMoviesGateway(
             baseUrl,
+            TestData.POSTER_BASE_URL,
+            500,
             "123",
             "pt-BR",
             OkHttpClient(),
@@ -128,6 +135,8 @@ class HttpMoviesGatewayIntegrationTest {
 
         val service = HttpMoviesGateway(
             baseUrl,
+            TestData.POSTER_BASE_URL,
+            500,
             "123",
             "pt-BR",
             OkHttpClient(),

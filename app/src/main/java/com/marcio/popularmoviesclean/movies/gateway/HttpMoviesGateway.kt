@@ -7,6 +7,8 @@ import okhttp3.Request
 
 class HttpMoviesGateway(
     private val baseUrl: String,
+    private val basePosterUrl: String,
+    private val posterWidth: Int,
     private val apiKey: String,
     private val locale: String = "en-US",
     private val httpClient: OkHttpClient,
@@ -30,6 +32,6 @@ class HttpMoviesGateway(
         val response = httpClient.newCall(request).execute()
 
         check(response.isSuccessful) { "Failed to get movies from server with status code: ${response.code()}" }
-        return gatewayParser.parseMovies(response.body()!!.string())
+        return gatewayParser.parseMovies(response.body()!!.string(), basePosterUrl, posterWidth)
     }
 }

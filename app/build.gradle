@@ -24,6 +24,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         buildConfigField "String", "BASE_URL", "\"${getPropertyWithFallback("MOVIES_TMDB_BASE_URL")}\""
+        buildConfigField "String", "BASE_POSTER_URL", "\"${getPropertyWithFallback("MOVIES_TMDB_BASE_POSTER_URL")}\""
         buildConfigField "String", "API_KEY", "\"${getPropertyWithFallback("MOVIES_TMDB_API_KEY")}\""
         buildConfigField "int", "LIST_ITEM_OFFSET", "${getPropertyWithFallback("MOVIES_LIST_ITEM_OFFSET")}"
     }
@@ -61,6 +62,7 @@ dependencies {
     implementation "androidx.legacy:legacy-support-v4:${androidJetpackVersion}"
     implementation "androidx.core:core-ktx:${jetpackAppCompatVersion}"
     implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
+    implementation "com.squareup.picasso:picasso:$picassoVersion"
     implementation "io.reactivex.rxjava2:rxjava:${rxJavaVersion}"
     implementation "io.reactivex.rxjava2:rxandroid:${rxJavaAndroidVersion}"
 

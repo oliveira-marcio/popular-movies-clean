@@ -4,7 +4,11 @@ import com.marcio.popularmoviesclean.movies.models.Movie
 import org.json.JSONObject
 
 class MoviesGatewayJsonParser : MoviesGatewayParser {
-    override fun parseMovies(responseBody: String): List<Movie> {
+    override fun parseMovies(
+        responseBody: String,
+        posterBaseUrl: String,
+        posterWidth: Int
+    ): List<Movie> {
         val moviesList = mutableListOf<Movie>()
 
         val response = JSONObject(responseBody)
@@ -12,10 +16,17 @@ class MoviesGatewayJsonParser : MoviesGatewayParser {
 
         for (index in 0 until moviesArray.length()) {
             val movieObject = moviesArray.getJSONObject(index)
+            val posterUrl =
+                if (movieObject.has("poster_path")) {
+                    "${posterBaseUrl}w$posterWidth${movieObject.getString("poster_path")}"
+                } else {
+                    ""
+                }
+
             moviesList.add(
                 Movie(
                     movieObject.optString("title"),
-                    movieObject.optString("poster_path"),
+                    posterUrl,
                     movieObject.optString("overview"),
                     movieObject.optDouble("vote_average"),
                     movieObject.optInt("vote_count"),

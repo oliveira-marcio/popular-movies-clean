@@ -10,15 +10,15 @@ import io.mockk.Called
 import io.mockk.mockk
 import io.mockk.verify
 import io.mockk.verifySequence
-import org.junit.Test
 import java.io.IOException
+import org.junit.Test
 
 class MoviesMainPresenterTest {
     @Test
     fun `Given movies are loaded When state is updated Then show movies and hide main loading and error`() {
         val viewMock = mockk<MoviesMainView>(relaxed = true)
         val movies = Movies(TestData.POPULAR_MOVIES)
-        val placeHolder = MovieItemPlaceHolder("", 123)
+        val placeHolder = MovieItemPlaceHolder("")
         val presenter = MoviesMainPresenter(
             mockk(),
             FakeDispatcher(),
@@ -45,7 +45,7 @@ class MoviesMainPresenterTest {
     fun `Given movies are loaded When view is attached after state is updated Then show movies and hide main loading and error`() {
         val viewMock = mockk<MoviesMainView>(relaxed = true)
         val movies = Movies(TestData.POPULAR_MOVIES)
-        val placeHolder = MovieItemPlaceHolder("", 123)
+        val placeHolder = MovieItemPlaceHolder("")
         val presenter = MoviesMainPresenter(
             mockk(),
             FakeDispatcher(),
@@ -99,7 +99,7 @@ class MoviesMainPresenterTest {
             5
         )
 
-        presenter.attachView(viewMock, MovieItemPlaceHolder("", 123))
+        presenter.attachView(viewMock, MovieItemPlaceHolder(""))
 
         verify {
             viewMock wasNot Called
@@ -115,7 +115,7 @@ class MoviesMainPresenterTest {
             5
         )
 
-        presenter.attachView(viewMock, MovieItemPlaceHolder("", 123))
+        presenter.attachView(viewMock, MovieItemPlaceHolder(""))
         presenter.onStateChanged(
             State(State.Name.LOADING)
         )
@@ -138,7 +138,7 @@ class MoviesMainPresenterTest {
             5
         )
 
-        presenter.attachView(viewMock, MovieItemPlaceHolder("", 123))
+        presenter.attachView(viewMock, MovieItemPlaceHolder(""))
         presenter.onStateChanged(
             State(
                 State.Name.LOADING,
@@ -162,7 +162,7 @@ class MoviesMainPresenterTest {
             5
         )
 
-        presenter.attachView(viewMock, MovieItemPlaceHolder("", 123))
+        presenter.attachView(viewMock, MovieItemPlaceHolder(""))
         presenter.onStateChanged(
             State(State.Name.ERROR, error = MoviesGatewayError(IOException()))
         )
@@ -179,7 +179,7 @@ class MoviesMainPresenterTest {
     fun `Given a network error loading movies and there are previous movies loaded When state is updated Then show movies list and show network warning and hide other views`() {
         val viewMock = mockk<MoviesMainView>(relaxed = true)
         val movies = Movies(TestData.POPULAR_MOVIES)
-        val placeHolder = MovieItemPlaceHolder("", 123)
+        val placeHolder = MovieItemPlaceHolder("")
         val presenter = MoviesMainPresenter(
             mockk(),
             FakeDispatcher(),
@@ -212,7 +212,7 @@ class MoviesMainPresenterTest {
             5
         )
 
-        presenter.attachView(viewMock, MovieItemPlaceHolder("", 123))
+        presenter.attachView(viewMock, MovieItemPlaceHolder(""))
         presenter.onStateChanged(
             State(State.Name.ERROR, error = MoviesGatewayError())
         )
@@ -229,7 +229,7 @@ class MoviesMainPresenterTest {
     fun `Given a unknown error loading movies and there are previous movies loaded When state is updated Then show movies list and show unknown warning and hide other views`() {
         val viewMock = mockk<MoviesMainView>(relaxed = true)
         val movies = Movies(TestData.POPULAR_MOVIES)
-        val placeHolder = MovieItemPlaceHolder("", 123)
+        val placeHolder = MovieItemPlaceHolder("")
         val presenter = MoviesMainPresenter(
             mockk(),
             FakeDispatcher(),

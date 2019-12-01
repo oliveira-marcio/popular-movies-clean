@@ -6,10 +6,12 @@ class TestData {
 
     companion object {
 
+        val POSTER_BASE_URL = "http://image.tmdb.org/t/p/"
+
         val POPULAR_MOVIES = listOf(
             Movie(
                 "Suicide Squad",
-                "/e1mjopzAS2KNsvpbpahQ1a6SkSn.jpg",
+                "http://image.tmdb.org/t/p/w500/e1mjopzAS2KNsvpbpahQ1a6SkSn.jpg",
                 "From DC Comics comes the Suicide Squad, an antihero team of incarcerated supervillains who act as deniable assets for the United States government, undertaking high-risk black ops missions in exchange for commuted prison sentences.",
                 5.91,
                 1466,
@@ -17,7 +19,7 @@ class TestData {
             ),
             Movie(
                 "Jason Bourne",
-                "/lFSSLTlFozwpaGlO31OoUeirBgQ.jpg",
+                "http://image.tmdb.org/t/p/w500/lFSSLTlFozwpaGlO31OoUeirBgQ.jpg",
                 "The most dangerous former operative of the CIA is drawn out of hiding to uncover hidden truths about his past.",
                 5.25,
                 649,
@@ -25,10 +27,21 @@ class TestData {
             )
         )
 
+        val POPULAR_MOVIES_NO_POSTER = listOf(
+            Movie(
+                "Suicide Squad",
+                "",
+                "From DC Comics comes the Suicide Squad, an antihero team of incarcerated supervillains who act as deniable assets for the United States government, undertaking high-risk black ops missions in exchange for commuted prison sentences.",
+                5.91,
+                1466,
+                "2016-08-03"
+            )
+        )
+
         val TOP_RATED_MOVIES = listOf(
             Movie(
                 "The Shawshank Redemption",
-                "/9O7gLzmreU0nGkIB6K3BsJbzvNv.jpg",
+                "http://image.tmdb.org/t/p/w500/9O7gLzmreU0nGkIB6K3BsJbzvNv.jpg",
                 "Framed in the 1940s for the double murder of his wife and her lover, upstanding banker Andy Dufresne begins a new life at the Shawshank prison, where he puts his accounting skills to work for an amoral warden. During his long stretch in prison, Dufresne comes to be admired by the other inmates -- including an older prisoner named Red -- for his integrity and unquenchable sense of hope.",
                 8.32,
                 5238,
@@ -36,7 +49,7 @@ class TestData {
             ),
             Movie(
                 "Whiplash",
-                "/lIv1QinFqz4dlp5U4lQ6HaiskOZ.jpg",
+                "http://image.tmdb.org/t/p/w500/lIv1QinFqz4dlp5U4lQ6HaiskOZ.jpg",
                 "Under the direction of a ruthless instructor, a talented young drummer begins to pursue perfection at any cost, even his humanity.",
                 8.29,
                 2059,
@@ -89,6 +102,23 @@ class TestData {
                 }                            
               ],
               "total_results": 2,
+              "total_pages": 1
+            }
+        """
+
+        const val JSON_POPULAR_MOVIES_NO_POSTER_RESPONSE = """
+            {
+              "page": 1,
+              "results": [
+                {
+                  "overview": "From DC Comics comes the Suicide Squad, an antihero team of incarcerated supervillains who act as deniable assets for the United States government, undertaking high-risk black ops missions in exchange for commuted prison sentences.",
+                  "release_date": "2016-08-03",
+                  "title": "Suicide Squad",
+                  "vote_count": 1466,
+                  "vote_average": 5.91
+                }
+              ],
+              "total_results": 1,
               "total_pages": 1
             }
         """
