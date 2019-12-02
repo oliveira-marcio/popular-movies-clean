@@ -1,7 +1,6 @@
-package com.marcio.popularmoviesclean.movies.models
+package com.marcio.popularmoviesclean.movies.presentation.details
 
-data class Movie(
-    val id: String = "",
+data class MovieDetailsPlaceHolder(
     val title: String = "",
     val posterUrl: String = "",
     val synopsis: String = "",

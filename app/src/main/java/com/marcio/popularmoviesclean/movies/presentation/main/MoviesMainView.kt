@@ -1,4 +1,4 @@
-package com.marcio.popularmoviesclean.movies.presentation
+package com.marcio.popularmoviesclean.movies.presentation.main
 
 interface MoviesMainView {
     fun showMovies(listViewModel: MoviesListViewModel)

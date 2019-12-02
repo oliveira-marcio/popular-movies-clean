@@ -1,4 +1,4 @@
-package com.marcio.popularmoviesclean.movies.presentation
+package com.marcio.popularmoviesclean.movies.presentation.main
 
 import com.marcio.popularmoviesclean.movies.models.Movie
 

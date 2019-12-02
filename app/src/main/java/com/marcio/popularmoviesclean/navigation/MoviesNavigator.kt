@@ -2,7 +2,7 @@ package com.marcio.popularmoviesclean.navigation
 
 import androidx.fragment.app.FragmentManager
 import com.marcio.popularmoviesclean.R
-import com.marcio.popularmoviesclean.movies.presentation.MoviesMainFragment
+import com.marcio.popularmoviesclean.movies.presentation.main.MoviesMainFragment
 
 class MoviesNavigator(
     private val fragmentManager: FragmentManager
@@ -14,5 +14,9 @@ class MoviesNavigator(
                 MoviesMainFragment()
             )
             .commit()
+    }
+
+    override fun navigateBack() {
+        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 }

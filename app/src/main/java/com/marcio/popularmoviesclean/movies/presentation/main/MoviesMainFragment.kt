@@ -1,4 +1,4 @@
-package com.marcio.popularmoviesclean.movies.presentation
+package com.marcio.popularmoviesclean.movies.presentation.main
 
 import android.content.Context
 import android.os.Bundle
@@ -25,7 +25,8 @@ import kotlinx.android.synthetic.main.fragment_movies_main.listLoading
 import kotlinx.android.synthetic.main.fragment_movies_main.mainLoading
 import kotlinx.android.synthetic.main.fragment_movies_main.moviesGrid
 
-class MoviesMainFragment : Fragment(), MoviesMainView {
+class MoviesMainFragment : Fragment(),
+    MoviesMainView {
 
     companion object {
         const val IMAGE_LOADER_REFERENCE = "MoviesMainFragment"
@@ -90,11 +91,12 @@ class MoviesMainFragment : Fragment(), MoviesMainView {
         layoutManager = GridLayoutManager(context, spanCount)
         moviesGrid.layoutManager = layoutManager
 
-        adapter = MoviesListAdapter(
-            LayoutInflater.from(context),
-            imageLoader,
-            IMAGE_LOADER_REFERENCE
-        )
+        adapter =
+            MoviesListAdapter(
+                LayoutInflater.from(context),
+                imageLoader,
+                IMAGE_LOADER_REFERENCE
+            )
         moviesGrid.adapter = adapter
     }
 

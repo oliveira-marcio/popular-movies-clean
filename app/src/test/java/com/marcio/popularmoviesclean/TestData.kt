@@ -10,54 +10,54 @@ class TestData {
 
         val POPULAR_MOVIES = listOf(
             Movie(
-                297761,
+                "297761",
                 "Suicide Squad",
                 "http://image.tmdb.org/t/p/w500/e1mjopzAS2KNsvpbpahQ1a6SkSn.jpg",
                 "From DC Comics comes the Suicide Squad, an antihero team of incarcerated supervillains who act as deniable assets for the United States government, undertaking high-risk black ops missions in exchange for commuted prison sentences.",
-                5.91,
-                1466,
+                "5.91",
+                "1466",
                 "2016-08-03"
             ),
             Movie(
-                324668,
+                "324668",
                 "Jason Bourne",
                 "http://image.tmdb.org/t/p/w500/lFSSLTlFozwpaGlO31OoUeirBgQ.jpg",
                 "The most dangerous former operative of the CIA is drawn out of hiding to uncover hidden truths about his past.",
-                5.25,
-                649,
+                "5.25",
+                "649",
                 "2016-07-27"
             )
         )
 
         val POPULAR_MOVIES_NO_POSTER = listOf(
             Movie(
-                297761,
+                "297761",
                 "Suicide Squad",
                 "",
                 "From DC Comics comes the Suicide Squad, an antihero team of incarcerated supervillains who act as deniable assets for the United States government, undertaking high-risk black ops missions in exchange for commuted prison sentences.",
-                5.91,
-                1466,
+                "5.91",
+                "1466",
                 "2016-08-03"
             )
         )
 
         val TOP_RATED_MOVIES = listOf(
             Movie(
-                278,
+                "278",
                 "The Shawshank Redemption",
                 "http://image.tmdb.org/t/p/w500/9O7gLzmreU0nGkIB6K3BsJbzvNv.jpg",
                 "Framed in the 1940s for the double murder of his wife and her lover, upstanding banker Andy Dufresne begins a new life at the Shawshank prison, where he puts his accounting skills to work for an amoral warden. During his long stretch in prison, Dufresne comes to be admired by the other inmates -- including an older prisoner named Red -- for his integrity and unquenchable sense of hope.",
-                8.32,
-                5238,
+                "8.32",
+                "5238",
                 "1994-09-10"
             ),
             Movie(
-                244786,
+                "244786",
                 "Whiplash",
                 "http://image.tmdb.org/t/p/w500/lIv1QinFqz4dlp5U4lQ6HaiskOZ.jpg",
                 "Under the direction of a ruthless instructor, a talented young drummer begins to pursue perfection at any cost, even his humanity.",
-                8.29,
-                2059,
+                "8.29",
+                "2059",
                 "2014-10-10"
             )
         )

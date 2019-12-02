@@ -333,13 +333,13 @@ class MoviesMainUseCasesTest {
         val listenerMock = mockk<StateListener<Movies, MoviesGatewayError>>(relaxed = true)
         moviesStateMachine.addStateChangedListener(listenerMock)
         moviesStateMachine.loadMovies()
-        moviesStateMachine.selectMovie(297761)
+        moviesStateMachine.selectMovie("297761")
 
         verify {
             listenerMock.onStateChanged(
                 State(
                     State.Name.LOADED,
-                    Movies(popularMoviesList, Movies.Category.POPULAR, 297761)
+                    Movies(popularMoviesList, Movies.Category.POPULAR, "297761")
                 )
             )
         }

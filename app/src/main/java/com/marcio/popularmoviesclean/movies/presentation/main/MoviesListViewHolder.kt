@@ -1,9 +1,10 @@
-package com.marcio.popularmoviesclean.movies.presentation
+package com.marcio.popularmoviesclean.movies.presentation.main
 
 import android.view.View
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.marcio.popularmoviesclean.R
+import com.marcio.popularmoviesclean.movies.presentation.ImageLoader
 
 class MoviesListViewHolder(
     view: View,

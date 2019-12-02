@@ -31,7 +31,7 @@ class MoviesTest {
     fun `Given list of movies and nonexistent id When is movie selected is requested Then return false`() {
         val movies = Movies(
             TestData.POPULAR_MOVIES,
-            selectedMovieId = 0
+            selectedMovieId = "invalid"
         )
 
         assertEquals(null, movies.selectedMovie)
@@ -41,7 +41,7 @@ class MoviesTest {
     fun `Given list of movies and nonexistent id When selected movie is requested Then return null`() {
         val movies = Movies(
             TestData.POPULAR_MOVIES,
-            selectedMovieId = 0
+            selectedMovieId = "invalid"
         )
 
         assertEquals(false, movies.isSelected)

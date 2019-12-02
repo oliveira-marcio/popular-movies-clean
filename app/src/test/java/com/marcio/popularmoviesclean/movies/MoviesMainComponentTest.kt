@@ -20,7 +20,7 @@ import com.marcio.popularmoviesclean.TestData
 import com.marcio.popularmoviesclean.movies.gateway.HttpMoviesGateway
 import com.marcio.popularmoviesclean.movies.gateway.MoviesGatewayJsonParser
 import com.marcio.popularmoviesclean.movies.presentation.FakeImageLoader
-import com.marcio.popularmoviesclean.movies.presentation.MoviesMainFragment
+import com.marcio.popularmoviesclean.movies.presentation.main.MoviesMainFragment
 import com.marcio.popularmoviesclean.state.FakeDispatcherFactory
 import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockResponse

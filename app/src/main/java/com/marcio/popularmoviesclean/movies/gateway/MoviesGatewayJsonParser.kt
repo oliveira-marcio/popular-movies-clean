@@ -25,12 +25,12 @@ class MoviesGatewayJsonParser : MoviesGatewayParser {
 
             moviesList.add(
                 Movie(
-                    movieObject.optInt("id"),
+                    movieObject.optString("id"),
                     movieObject.optString("title"),
                     posterUrl,
                     movieObject.optString("overview"),
-                    movieObject.optDouble("vote_average"),
-                    movieObject.optInt("vote_count"),
+                    movieObject.optString("vote_average"),
+                    movieObject.optString("vote_count"),
                     movieObject.optString("release_date")
                 )
             )
