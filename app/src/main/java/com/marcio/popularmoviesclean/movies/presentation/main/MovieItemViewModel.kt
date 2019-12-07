@@ -6,6 +6,8 @@ data class MovieItemViewModel(
     private val movie: Movie,
     private val itemPlaceHolder: MovieItemPlaceHolder
 ) {
-    val imageUrl = movie.posterUrl
-    val contentDescription = if (movie.title.isNotBlank()) movie.title else itemPlaceHolder.title
+    val id: String = movie.id
+    val imageUrl: String = movie.posterUrl
+    val contentDescription: String =
+        if (movie.title.isNotBlank()) movie.title else itemPlaceHolder.title
 }

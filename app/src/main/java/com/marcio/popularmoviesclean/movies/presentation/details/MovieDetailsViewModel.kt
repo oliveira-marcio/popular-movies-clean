@@ -14,6 +14,7 @@ data class MovieDetailsViewModel(
         getValueOrReplacement(selectedMovie.ratingsCount, detailsPlaceHolder.ratingsCount)
     val releaseDate =
         getValueOrReplacement(selectedMovie.releaseDate, detailsPlaceHolder.releaseDate)
+    val posterUrl = selectedMovie.posterUrl
 
     private fun getValueOrReplacement(value: String, replacement: String) =
         if (value.isNotBlank()) value else replacement

@@ -5,12 +5,11 @@ import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.Display
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,11 +18,13 @@ import com.marcio.popularmoviesclean.DependencyManager
 import com.marcio.popularmoviesclean.R
 import com.marcio.popularmoviesclean.android.ViewContainer
 import com.marcio.popularmoviesclean.movies.models.Movies
+import com.marcio.popularmoviesclean.navigation.Navigator
 import kotlin.math.roundToInt
 import kotlinx.android.synthetic.main.fragment_movies_main.errorView
 import kotlinx.android.synthetic.main.fragment_movies_main.listLoading
 import kotlinx.android.synthetic.main.fragment_movies_main.mainLoading
 import kotlinx.android.synthetic.main.fragment_movies_main.moviesGrid
+import kotlinx.android.synthetic.main.fragment_movies_main.toolbar
 
 class MoviesMainFragment : Fragment(),
     MoviesMainView {
@@ -33,10 +34,13 @@ class MoviesMainFragment : Fragment(),
     }
 
     private var dependencyManager: DependencyManager? = null
+    private var navigator: Navigator? = null
 
     private var adapter: MoviesListAdapter? = null
     private var layoutManager: LinearLayoutManager? = null
+    private var menuListener: Toolbar.OnMenuItemClickListener? = null
     private var scrollListener: RecyclerView.OnScrollListener? = null
+    private var movieClickListener: MoviesListAdapter.OnMovieClickListener? = null
     private var toast: Toast? = null
     private var display: Display? = null
 
@@ -55,10 +59,32 @@ class MoviesMainFragment : Fragment(),
     override fun onAttach(context: Context) {
         super.onAttach(context)
         dependencyManager = (context as ViewContainer).dependencyManager
+        navigator = (context as ViewContainer).navigator
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        menuListener = object : Toolbar.OnMenuItemClickListener {
+            override fun onMenuItemClick(item: MenuItem?): Boolean {
+                when (item?.itemId) {
+                    R.id.actionRefresh -> {
+                        moviesMainUseCases.reloadMovies()
+                        return true
+                    }
+                    R.id.actionPopular -> {
+                        moviesMainUseCases.loadMovies()
+                        return true
+                    }
+                    R.id.actionTopRated -> {
+                        moviesMainUseCases.loadMovies(Movies.Category.TOP_RATED)
+                        return true
+                    }
+                }
+                return false
+            }
+        }
+
         scrollListener = object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
@@ -71,6 +97,13 @@ class MoviesMainFragment : Fragment(),
                 }
             }
         }
+
+        movieClickListener = object : MoviesListAdapter.OnMovieClickListener {
+            override fun onMovieClick(id: String) {
+                moviesMainUseCases.selectMovie(id)
+                navigator!!.navigateToDetailsView()
+            }
+        }
     }
 
     override fun onCreateView(
@@ -78,7 +111,6 @@ class MoviesMainFragment : Fragment(),
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        setHasOptionsMenu(true)
         return inflater.inflate(R.layout.fragment_movies_main, container, false)
     }
 
@@ -100,6 +132,11 @@ class MoviesMainFragment : Fragment(),
         moviesGrid.adapter = adapter
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        toolbar.inflateMenu(R.menu.menu)
+    }
+
     override fun onResume() {
         super.onResume()
         moviesMainPresenter.attachView(
@@ -108,12 +145,16 @@ class MoviesMainFragment : Fragment(),
                 getString(R.string.movie_title_placeholder)
             )
         )
+        toolbar.setOnMenuItemClickListener(menuListener)
         moviesGrid.addOnScrollListener(scrollListener!!)
+        adapter!!.clickListener = movieClickListener
     }
 
     override fun onPause() {
         moviesMainPresenter.detachView()
+        toolbar.setOnMenuItemClickListener(null)
         moviesGrid.removeOnScrollListener(scrollListener!!)
+        adapter!!.clickListener = null
         super.onPause()
     }
 
@@ -128,36 +169,16 @@ class MoviesMainFragment : Fragment(),
     }
 
     override fun onDestroy() {
+        menuListener = null
         scrollListener = null
+        movieClickListener = null
         super.onDestroy()
     }
 
     override fun onDetach() {
         dependencyManager = null
+        navigator = null
         super.onDetach()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.actionRefresh -> {
-                moviesMainUseCases.reloadMovies()
-                return true
-            }
-            R.id.actionPopular -> {
-                moviesMainUseCases.loadMovies()
-                return true
-            }
-            R.id.actionTopRated -> {
-                moviesMainUseCases.loadMovies(Movies.Category.TOP_RATED)
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     override fun showMovies(listViewModel: MoviesListViewModel) {

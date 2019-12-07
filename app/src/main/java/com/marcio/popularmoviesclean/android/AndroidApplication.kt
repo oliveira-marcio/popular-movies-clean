@@ -5,10 +5,10 @@ import com.marcio.popularmoviesclean.BuildConfig
 import com.marcio.popularmoviesclean.DependencyManager
 import com.marcio.popularmoviesclean.MoviesApplication
 import com.marcio.popularmoviesclean.R
-import com.marcio.popularmoviesclean.RxJavaDispatcherFactory
 import com.marcio.popularmoviesclean.movies.gateway.HttpMoviesGateway
 import com.marcio.popularmoviesclean.movies.gateway.MoviesGatewayJsonParser
 import com.marcio.popularmoviesclean.picasso.PicassoImageLoader
+import com.marcio.popularmoviesclean.rxjava.RxJavaDispatcherFactory
 import com.squareup.picasso.Picasso
 import io.reactivex.android.schedulers.AndroidSchedulers
 import java.util.Locale
@@ -21,7 +21,11 @@ class AndroidApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         dependencyManager = MoviesApplication.Builder()
-            .registerDispatcherFactory(lazy { RxJavaDispatcherFactory(AndroidSchedulers.mainThread()) })
+            .registerDispatcherFactory(lazy {
+                RxJavaDispatcherFactory(
+                    AndroidSchedulers.mainThread()
+                )
+            })
             .registerMoviesGateway(lazy {
                 HttpMoviesGateway(
                     BuildConfig.BASE_URL,

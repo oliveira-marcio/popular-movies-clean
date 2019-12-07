@@ -6,4 +6,8 @@
     <string name="action_popular">Popular Movies</string>
     <string name="action_top_rated">Top Rated Movies</string>
     <string name="movie_title_placeholder">Title not available</string>
+    <string name="movie_release_date_placeholder">Not available</string>
+    <string name="movie_average_ratings_placeholder">-</string>
+    <string name="movie_rating_count_placeholder">-</string>
+    <string name="movie_synopsis_placeholder">Synopsis not available</string>
 </resources>

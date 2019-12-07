@@ -1,7 +1,6 @@
-package com.marcio.popularmoviesclean
+package com.marcio.popularmoviesclean.rxjava
 
 import android.os.HandlerThread
-import com.marcio.popularmoviesclean.rxjava.RxJavaDispatcher
 import com.marcio.popularmoviesclean.state.Dispatcher
 import com.marcio.popularmoviesclean.state.DispatcherFactory
 import io.reactivex.Scheduler

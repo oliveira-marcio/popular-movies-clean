@@ -19,6 +19,7 @@ import com.marcio.popularmoviesclean.TestApplication
 import com.marcio.popularmoviesclean.TestData
 import com.marcio.popularmoviesclean.movies.gateway.HttpMoviesGateway
 import com.marcio.popularmoviesclean.movies.gateway.MoviesGatewayJsonParser
+import com.marcio.popularmoviesclean.movies.models.Movies
 import com.marcio.popularmoviesclean.movies.presentation.FakeImageLoader
 import com.marcio.popularmoviesclean.movies.presentation.main.MoviesMainFragment
 import com.marcio.popularmoviesclean.state.FakeDispatcherFactory
@@ -31,7 +32,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
-import org.robolectric.fakes.RoboMenuItem
 import org.robolectric.shadows.ShadowToast
 
 @RunWith(AndroidJUnit4::class)
@@ -167,10 +167,10 @@ class MoviesMainComponentTest {
         onView(withContentDescription("Suicide Squad")).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
         onView(withContentDescription("Jason Bourne")).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
 
-        val menuItem = RoboMenuItem(R.id.actionTopRated)
-        rule.activity.supportFragmentManager.findFragmentById(1)?.onOptionsItemSelected(menuItem)
+        rule.activity.dependencyManager.moviesMainUseCases.loadMovies(Movies.Category.TOP_RATED)
 
         val context = ApplicationProvider.getApplicationContext<TestApplication>()
+
         assertEquals(context.getString(R.string.error_unknown), ShadowToast.getTextOfLatestToast())
 
         server.shutdown()
@@ -206,8 +206,7 @@ class MoviesMainComponentTest {
         onView(withContentDescription("Suicide Squad")).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
         onView(withContentDescription("Jason Bourne")).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
 
-        val menuItem = RoboMenuItem(R.id.actionTopRated)
-        rule.activity.supportFragmentManager.findFragmentById(1)?.onOptionsItemSelected(menuItem)
+        rule.activity.dependencyManager.moviesMainUseCases.loadMovies(Movies.Category.TOP_RATED)
 
         onView(withContentDescription("The Shawshank Redemption")).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
         onView(withContentDescription("Whiplash")).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
@@ -245,8 +244,7 @@ class MoviesMainComponentTest {
         onView(withContentDescription("The Shawshank Redemption")).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
         onView(withContentDescription("Whiplash")).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
 
-        val menuItem = RoboMenuItem(R.id.actionPopular)
-        rule.activity.supportFragmentManager.findFragmentById(1)?.onOptionsItemSelected(menuItem)
+        rule.activity.dependencyManager.moviesMainUseCases.loadMovies(Movies.Category.POPULAR)
 
         onView(withContentDescription("Suicide Squad")).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
         onView(withContentDescription("Jason Bourne")).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
