@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="toolbar_elevation">4dp</dimen>
     <dimen name="default_layout_margin">16dp</dimen>
+    <dimen name="grid_margin">1dp</dimen>
     <dimen name="poster_grid_margin">2dp</dimen>
     <dimen name="rating_icon_margin">8dp</dimen>
 </resources>

@@ -19,6 +19,7 @@ import com.marcio.popularmoviesclean.DependencyManager
 import com.marcio.popularmoviesclean.R
 import com.marcio.popularmoviesclean.android.ViewContainer
 import com.marcio.popularmoviesclean.movies.models.Movies
+import com.marcio.popularmoviesclean.navigation.Navigator
 import kotlin.math.roundToInt
 import kotlinx.android.synthetic.main.fragment_movies_main.errorView
 import kotlinx.android.synthetic.main.fragment_movies_main.listLoading
@@ -33,10 +34,12 @@ class MoviesMainFragment : Fragment(),
     }
 
     private var dependencyManager: DependencyManager? = null
+    private var navigator: Navigator? = null
 
     private var adapter: MoviesListAdapter? = null
     private var layoutManager: LinearLayoutManager? = null
     private var scrollListener: RecyclerView.OnScrollListener? = null
+    private var movieClickListener: MoviesListAdapter.OnMovieClickListener? = null
     private var toast: Toast? = null
     private var display: Display? = null
 
@@ -55,6 +58,7 @@ class MoviesMainFragment : Fragment(),
     override fun onAttach(context: Context) {
         super.onAttach(context)
         dependencyManager = (context as ViewContainer).dependencyManager
+        navigator = (context as ViewContainer).navigator
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,6 +73,13 @@ class MoviesMainFragment : Fragment(),
                         layoutManager!!.findLastVisibleItemPosition()
                     )
                 }
+            }
+        }
+
+        movieClickListener = object : MoviesListAdapter.OnMovieClickListener {
+            override fun onMovieClick(id: String) {
+                moviesMainUseCases.selectMovie(id)
+                navigator!!.navigateToDetailsView()
             }
         }
     }
@@ -109,11 +120,13 @@ class MoviesMainFragment : Fragment(),
             )
         )
         moviesGrid.addOnScrollListener(scrollListener!!)
+        adapter!!.clickListener = movieClickListener
     }
 
     override fun onPause() {
         moviesMainPresenter.detachView()
         moviesGrid.removeOnScrollListener(scrollListener!!)
+        adapter!!.clickListener = null
         super.onPause()
     }
 
@@ -129,11 +142,13 @@ class MoviesMainFragment : Fragment(),
 
     override fun onDestroy() {
         scrollListener = null
+        movieClickListener = null
         super.onDestroy()
     }
 
     override fun onDetach() {
         dependencyManager = null
+        navigator = null
         super.onDetach()
     }
 

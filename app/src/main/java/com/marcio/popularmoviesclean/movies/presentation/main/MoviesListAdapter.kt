@@ -13,6 +13,8 @@ class MoviesListAdapter(
     private val items: MutableList<MovieItemViewModel> = mutableListOf()
 ) : RecyclerView.Adapter<MoviesListViewHolder>() {
 
+    var clickListener: OnMovieClickListener? = null
+
     override fun getItemViewType(position: Int) = R.layout.movies_grid_item
 
     override fun getItemCount() = items.size
@@ -21,7 +23,8 @@ class MoviesListAdapter(
         return MoviesListViewHolder(
             inflater.inflate(viewType, parent, false),
             imageLoader,
-            imageLoaderReference
+            imageLoaderReference,
+            clickListener
         )
     }
 
@@ -33,5 +36,9 @@ class MoviesListAdapter(
         items.clear()
         items.addAll(moviesItems)
         notifyDataSetChanged()
+    }
+
+    interface OnMovieClickListener {
+        fun onMovieClick(id: String)
     }
 }

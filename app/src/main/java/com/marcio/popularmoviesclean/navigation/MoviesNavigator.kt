@@ -2,6 +2,7 @@ package com.marcio.popularmoviesclean.navigation
 
 import androidx.fragment.app.FragmentManager
 import com.marcio.popularmoviesclean.R
+import com.marcio.popularmoviesclean.movies.presentation.details.MovieDetailsFragment
 import com.marcio.popularmoviesclean.movies.presentation.main.MoviesMainFragment
 
 class MoviesNavigator(
@@ -16,7 +17,17 @@ class MoviesNavigator(
             .commit()
     }
 
+    override fun navigateToDetailsView() {
+        fragmentManager.beginTransaction()
+            .replace(
+                R.id.activity_container,
+                MovieDetailsFragment()
+            )
+            .addToBackStack("MoviesList->MovieDetail")
+            .commit()
+    }
+
     override fun navigateBack() {
-        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
+        fragmentManager.popBackStack()
     }
 }
