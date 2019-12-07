@@ -17,7 +17,7 @@ class MovieDetailsPresenterTest {
         val selectedMovie = TestData.POPULAR_MOVIES[0]
         val movies = Movies(TestData.POPULAR_MOVIES, selectedMovieId = selectedMovie.id)
         val placeHolder = MovieDetailsPlaceHolder()
-        val presenter = MovieDetailsPresenter(FakeDispatcher(), mockk())
+        val presenter = MovieDetailsPresenter(FakeDispatcher())
 
         presenter.attachView(viewMock, placeHolder)
         presenter.onStateChanged(State(State.Name.LOADED, movies))
@@ -33,7 +33,7 @@ class MovieDetailsPresenterTest {
         val selectedMovie = TestData.POPULAR_MOVIES[0]
         val movies = Movies(TestData.POPULAR_MOVIES, selectedMovieId = selectedMovie.id)
         val placeHolder = MovieDetailsPlaceHolder()
-        val presenter = MovieDetailsPresenter(FakeDispatcher(), mockk())
+        val presenter = MovieDetailsPresenter(FakeDispatcher())
 
         presenter.onStateChanged(State(State.Name.LOADED, movies))
         presenter.attachView(viewMock, placeHolder)
@@ -48,7 +48,7 @@ class MovieDetailsPresenterTest {
         val viewMock = mockk<MovieDetailsView>(relaxed = true)
         val selectedMovie = TestData.POPULAR_MOVIES[0]
         val movies = Movies(TestData.POPULAR_MOVIES, selectedMovieId = selectedMovie.id)
-        val presenter = MovieDetailsPresenter(FakeDispatcher(), mockk())
+        val presenter = MovieDetailsPresenter(FakeDispatcher())
 
         presenter.onStateChanged(State(State.Name.LOADED, movies))
 
@@ -60,7 +60,7 @@ class MovieDetailsPresenterTest {
     @Test
     fun `Given state is null When view is attached Then show do nothing`() {
         val viewMock = mockk<MovieDetailsView>(relaxed = true)
-        val presenter = MovieDetailsPresenter(FakeDispatcher(), mockk())
+        val presenter = MovieDetailsPresenter(FakeDispatcher())
 
         presenter.attachView(viewMock, MovieDetailsPlaceHolder())
 
@@ -75,9 +75,10 @@ class MovieDetailsPresenterTest {
         val navigatorMock = mockk<Navigator>(relaxed = true)
         val movies = Movies(TestData.POPULAR_MOVIES)
         val placeHolder = MovieDetailsPlaceHolder()
-        val presenter = MovieDetailsPresenter(FakeDispatcher(), navigatorMock)
+        val presenter = MovieDetailsPresenter(FakeDispatcher())
 
         presenter.attachView(viewMock, placeHolder)
+        presenter.attachNavigator(navigatorMock)
         presenter.onStateChanged(State(State.Name.LOADED, movies))
 
         verify {
@@ -94,9 +95,10 @@ class MovieDetailsPresenterTest {
         val viewMock = mockk<MovieDetailsView>(relaxed = true)
         val navigatorMock = mockk<Navigator>(relaxed = true)
         val placeHolder = MovieDetailsPlaceHolder()
-        val presenter = MovieDetailsPresenter(FakeDispatcher(), navigatorMock)
+        val presenter = MovieDetailsPresenter(FakeDispatcher())
 
         presenter.attachView(viewMock, placeHolder)
+        presenter.attachNavigator(navigatorMock)
         presenter.onStateChanged(State(State.Name.IDLE))
 
         verify {
@@ -113,9 +115,10 @@ class MovieDetailsPresenterTest {
         val viewMock = mockk<MovieDetailsView>(relaxed = true)
         val navigatorMock = mockk<Navigator>(relaxed = true)
         val placeHolder = MovieDetailsPlaceHolder()
-        val presenter = MovieDetailsPresenter(FakeDispatcher(), navigatorMock)
+        val presenter = MovieDetailsPresenter(FakeDispatcher())
 
         presenter.attachView(viewMock, placeHolder)
+        presenter.attachNavigator(navigatorMock)
         presenter.onStateChanged(State(State.Name.LOADING))
 
         verify {
@@ -132,9 +135,10 @@ class MovieDetailsPresenterTest {
         val viewMock = mockk<MovieDetailsView>(relaxed = true)
         val navigatorMock = mockk<Navigator>(relaxed = true)
         val placeHolder = MovieDetailsPlaceHolder()
-        val presenter = MovieDetailsPresenter(FakeDispatcher(), navigatorMock)
+        val presenter = MovieDetailsPresenter(FakeDispatcher())
 
         presenter.attachView(viewMock, placeHolder)
+        presenter.attachNavigator(navigatorMock)
         presenter.onStateChanged(State(State.Name.ERROR))
 
         verify {

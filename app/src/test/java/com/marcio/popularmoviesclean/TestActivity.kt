@@ -6,11 +6,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.marcio.popularmoviesclean.android.ViewContainer
 import com.marcio.popularmoviesclean.navigation.Navigator
+import io.mockk.mockk
 
 class TestActivity : AppCompatActivity(), ViewContainer {
 
     var testDependencyManager: DependencyManager? = null
-    var testNavigator: Navigator? = null
+    var testNavigator: Navigator = mockk(relaxed = true)
 
     override val dependencyManager: DependencyManager by lazy {
         testDependencyManager!!

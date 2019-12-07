@@ -4,6 +4,7 @@ import com.marcio.popularmoviesclean.movies.MoviesStateMachine
 import com.marcio.popularmoviesclean.movies.gateway.MoviesGateway
 import com.marcio.popularmoviesclean.movies.gateway.MoviesGatewayErrorFactory
 import com.marcio.popularmoviesclean.movies.presentation.ImageLoader
+import com.marcio.popularmoviesclean.movies.presentation.details.MovieDetailsPresenter
 import com.marcio.popularmoviesclean.movies.presentation.main.MoviesMainPresenter
 import com.marcio.popularmoviesclean.state.DispatcherFactory
 
@@ -23,6 +24,15 @@ class MoviesApplication private constructor(
                 moviesStateMachine,
                 lazyDispatcherFactory.value.createMainDispatcher(),
                 BuildConfig.LIST_ITEM_OFFSET
+            )
+        moviesStateMachine.addStateChangedListener(presenter)
+        presenter
+    }
+
+    override val movieDetailsPresenter by lazy {
+        val presenter =
+            MovieDetailsPresenter(
+                lazyDispatcherFactory.value.createMainDispatcher()
             )
         moviesStateMachine.addStateChangedListener(presenter)
         presenter

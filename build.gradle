@@ -3,7 +3,7 @@ buildscript {
         versionCodeApp = 1
         versionNameApp = '1.0'
         kotlinVersion = '1.3.61'
-        androidPluginVersion = '3.5.2'
+        androidPluginVersion = '3.5.3'
         compileAndroidSDkVersion = 29
         targetAndroidSDkVersion = 29
         minimumAndroidSDkVersion = 21

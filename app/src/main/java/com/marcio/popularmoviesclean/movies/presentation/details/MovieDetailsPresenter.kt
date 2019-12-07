@@ -2,15 +2,13 @@ package com.marcio.popularmoviesclean.movies.presentation.details
 
 import com.marcio.popularmoviesclean.movies.gateway.MoviesGatewayError
 import com.marcio.popularmoviesclean.movies.models.Movies
-import com.marcio.popularmoviesclean.navigation.Navigator
 import com.marcio.popularmoviesclean.state.Dispatcher
 import com.marcio.popularmoviesclean.state.Presenter
 import com.marcio.popularmoviesclean.state.State
 import com.marcio.popularmoviesclean.state.StateListener
 
 class MovieDetailsPresenter(
-    private val mainDispatcher: Dispatcher,
-    private val navigator: Navigator
+    private val mainDispatcher: Dispatcher
 ) : Presenter<MovieDetailsView, MovieDetailsPlaceHolder>(),
     StateListener<Movies, MoviesGatewayError> {
 
@@ -31,7 +29,7 @@ class MovieDetailsPresenter(
             if (currentState!!.name == State.Name.LOADED && movies!!.isSelected) {
                 view?.showDetails(MovieDetailsViewModel(movies.selectedMovie!!, placeHolder!!))
             } else {
-                navigator.navigateBack()
+                navigator?.navigateBack()
             }
         }
     }

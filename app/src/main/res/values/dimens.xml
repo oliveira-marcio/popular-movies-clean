@@ -2,4 +2,5 @@
 <resources>
     <dimen name="default_layout_margin">16dp</dimen>
     <dimen name="poster_grid_margin">2dp</dimen>
+    <dimen name="rating_icon_margin">8dp</dimen>
 </resources>
